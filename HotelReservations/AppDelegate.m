@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "HotelListViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,7 +21,7 @@
   self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
   [self.window makeKeyAndVisible];
   
-  self.window.rootViewController = [[ViewController alloc] init];
+  self.window.rootViewController = [[HotelListViewController alloc] init];
   
   return YES;
 }

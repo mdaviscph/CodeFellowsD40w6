@@ -1,12 +1,12 @@
 //
-//  ViewController.m
+//  HotelListViewController.m
 //  HotelReservations
 //
 //  Created by mike davis on 9/7/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "HotelListViewController.h"
 #import "Hotel.h"
 #import "HotelJSONParse.h"
 #import "Room.h"
@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 #import "AlertPopover.h"
 
-@interface ViewController () <UITableViewDataSource>
+@interface HotelListViewController () <UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *savedHotels;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation ViewController
+@implementation HotelListViewController
 
 #pragma mark - Private Property Getters, Setters
 
