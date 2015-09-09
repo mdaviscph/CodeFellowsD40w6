@@ -8,6 +8,7 @@
 
 #import "HotelJSONParse.h"
 #import "AppDelegate.h"
+#import "RoomJSONParse.h"
 
 @implementation Hotel (JSONParse)
 
@@ -20,6 +21,12 @@
   hotel.rating = jsonDictionary[@"stars"];
   hotel.city = jsonDictionary[@"location"];
   hotel.state = @"WA";
+  
+  NSArray *roomDictionaries = jsonDictionary[@"rooms"];
+  NSMutableArray *importedRooms = [[NSMutableArray alloc] init];
+  for (NSDictionary *roomDictionary in roomDictionaries) {
+    [importedRooms addObject: [Room createUsingJSON: roomDictionary ForHotel: hotel]];
+  }
   
   return hotel;
 }

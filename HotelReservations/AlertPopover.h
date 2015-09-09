@@ -21,6 +21,9 @@ extern NSString *const kErrorLocationServicesRestricted;
 extern NSString *const kEnableLocationServices;
 extern NSString *const kErrorMapKit;
 extern NSString *const kErrorParseFramework;
+extern NSString *const kErrorCoreDataFetch;
+extern NSString *const kErrorCoreDataSave;
+extern NSString *const kErrorJSONSerialization;
 
 extern NSString *const kActionOk;
 

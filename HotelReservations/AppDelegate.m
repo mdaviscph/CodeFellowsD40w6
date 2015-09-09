@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "HotelListViewController.h"
+#import "MenuViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,7 +21,7 @@
   self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
   [self.window makeKeyAndVisible];
   
-  self.window.rootViewController = [[HotelListViewController alloc] init];
+  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: [[MenuViewController alloc] init]];
   
   return YES;
 }

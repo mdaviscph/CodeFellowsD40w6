@@ -7,12 +7,13 @@
 //
 
 #import "RoomJSONParse.h"
+#import "Hotel.h"
 #import "ModelConstants.h"
 #import "AppDelegate.h"
 
 @implementation Room (JSONParse)
 
-+ (Room *)createUsingJSON: (NSDictionary *)jsonDictionary {
++ (Room *)createUsingJSON: (NSDictionary *)jsonDictionary ForHotel: (Hotel *)hotel {
   
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
   Room *room = [NSEntityDescription insertNewObjectForEntityForName: @"Room" inManagedObjectContext: context];
@@ -40,6 +41,7 @@
   room.type = beds;
   room.rate = jsonDictionary[@"rate"];
   
+  room.hotel = hotel;
   return room;
 }
 

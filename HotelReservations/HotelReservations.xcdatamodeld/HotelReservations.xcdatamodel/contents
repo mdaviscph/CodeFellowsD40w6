@@ -26,10 +26,10 @@
     <entity name="Room" representedClassName="Room" syncable="YES">
         <attribute name="clean" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="floor" attributeType="Integer 32" minValueString="1" defaultValueString="1" syncable="YES"/>
-        <attribute name="maxOccupancy" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="6" defaultValueString="0" syncable="YES"/>
+        <attribute name="maxOccupancy" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="6" defaultValueString="1" syncable="YES"/>
         <attribute name="number" attributeType="String" minValueString="2" syncable="YES"/>
         <attribute name="rate" optional="YES" attributeType="Decimal" minValueString="0" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 32" minValueString="1" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 32" minValueString="0" maxValueString="4" defaultValueString="0" syncable="YES"/>
         <relationship name="guest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Guest" inverseName="rooms" inverseEntity="Guest" syncable="YES"/>
         <relationship name="hotel" maxCount="1" deletionRule="Nullify" destinationEntity="Hotel" inverseName="rooms" inverseEntity="Hotel" syncable="YES"/>
     </entity>

@@ -11,6 +11,6 @@
 
 @interface Room (JSONParse)
 
-+ (Room *)createUsingJSON: (NSDictionary *)jsonDictionary;
++ (Room *)createUsingJSON: (NSDictionary *)jsonDictionary ForHotel: (Hotel *)hotel;
 
 @end

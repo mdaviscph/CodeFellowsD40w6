@@ -12,7 +12,7 @@
 
 + (NSData *) loadJSONFileInBundle: (NSString *)fileName withFileType: (NSString *)fileType {
   NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName ofType: fileType];
-  NSData *jsonData = [[NSData alloc] initWithContentsOfFile: filePath];
+  NSData *jsonData = [NSData dataWithContentsOfFile: filePath];
   return jsonData;
 }
 
