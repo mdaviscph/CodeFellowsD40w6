@@ -1,16 +1,15 @@
 //
-//  BaseTextView.h
+//  BackgroundView.h
 //  HotelReservations
 //
-//  Created by mike davis on 9/9/15.
+//  Created by mike davis on 9/10/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface BaseTextView : UITextView
+@interface BackgroundView : UIView
 
 - (void) addToSuperViewWithStandardConstraints: (UIView *)superView;
-- (void) addToSuperViewWithConstraintsForBorder: (UIView *)superView;
 
 @end

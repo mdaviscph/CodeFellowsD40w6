@@ -129,6 +129,10 @@ NSString *const menuItemReservations = @"Reservations";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"MenuCell" forIndexPath: indexPath];
   cell.textLabel.text = self.menuItems[indexPath.row];
+  
+//  CGFloat width = 300; // whatever your desired width is
+//  CGRect rect1 = [result boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+
   return cell;
 }
 

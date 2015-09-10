@@ -26,7 +26,9 @@
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[BaseTableView alloc] init];
+    _tableView = [[BaseTableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
+    _tableView.estimatedRowHeight = 44;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
   }
   return _tableView;
 }
@@ -48,8 +50,6 @@
 
   self.tableView.dataSource = self;
   [self.tableView registerClass: [HotelTableViewCell class] forCellReuseIdentifier: @"HotelCell"];
-  self.tableView.estimatedRowHeight = 44;
-  self.tableView.rowHeight = 100; // UITableViewAutomaticDimension;
 
   [[CoreDataStack sharedInstance] fetchHotels];
   [self updateUI];
@@ -70,6 +70,7 @@
 - (HotelTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   HotelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
   Hotel *hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
+  
   cell.hotel = hotel;
   return cell;
 }

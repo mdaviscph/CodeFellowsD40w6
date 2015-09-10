@@ -37,7 +37,6 @@
   [result appendAttributedString: subheadlineAttributedString];
   [result appendAttributedString: bodyAttributedString];
   [result appendAttributedString: footnoteAttributedString];
-  
   return result;
 }
 

@@ -8,19 +8,38 @@
 
 #import "BaseTextView.h"
 
+@interface BaseTextView ()
+@property (strong, nonatomic) NSArray *verticalConstraints;
+@property (strong, nonatomic) NSArray *horizontalConstraints;
+@end
+
 @implementation BaseTextView
 
-// with standard constraints
 - (void) addToSuperViewWithStandardConstraints: (UIView *)superView {
+  
+  NSDictionary *viewsInfo = @{@"textView" : self};
+  self.verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[textView]|" options: 0  metrics: nil views: viewsInfo];
+  self.horizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[textView]|" options: 0  metrics: nil views: viewsInfo];
+  
+  [self addToSuperViewWithConstraints: superView];
+}
 
+- (void) addToSuperViewWithConstraintsForBorder: (UIView *)superView {
+  
   [superView addSubview: self];
   
-  [self setTranslatesAutoresizingMaskIntoConstraints: NO];
   NSDictionary *viewsInfo = @{@"textView" : self};
-  NSArray *textViewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[textView]|" options: 0  metrics: nil views: viewsInfo];
-  NSArray *textViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[textView]|" options: 0  metrics: nil views: viewsInfo];
-  [superView addConstraints: textViewVerticalConstraints];
-  [superView addConstraints: textViewHorizontalConstraints];
+  self.verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|-4-[textView]-4-|" options: 0  metrics: nil views: viewsInfo];
+  self.horizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|-2-[textView]-2-|" options: 0  metrics: nil views: viewsInfo];
+  
+  [self addToSuperViewWithConstraints: superView];
+}
+
+- (void) addToSuperViewWithConstraints: (UIView *)superView {
+  [superView addSubview: self];
+  [self setTranslatesAutoresizingMaskIntoConstraints: NO];
+  [superView addConstraints: self.verticalConstraints];
+  [superView addConstraints: self.horizontalConstraints];
 }
 
 @end

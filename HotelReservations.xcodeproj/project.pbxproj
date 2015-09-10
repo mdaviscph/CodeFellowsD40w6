@@ -26,6 +26,7 @@
 		0061168D1BA10CBD00B5C54B /* HotelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061168C1BA10CBD00B5C54B /* HotelTableViewCell.m */; };
 		006116901BA1103A00B5C54B /* AttributedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061168F1BA1103A00B5C54B /* AttributedString.m */; };
 		006116931BA132D900B5C54B /* BaseTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116921BA132D900B5C54B /* BaseTextView.m */; };
+		006116991BA1EEEF00B5C54B /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116981BA1EEEF00B5C54B /* BackgroundView.m */; };
 		00D2C0341B9E855D00DA5A7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0331B9E855D00DA5A7A /* main.m */; };
 		00D2C0371B9E855D00DA5A7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0361B9E855D00DA5A7A /* AppDelegate.m */; };
 		00D2C03A1B9E855D00DA5A7A /* HotelReservations.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0381B9E855D00DA5A7A /* HotelReservations.xcdatamodeld */; };
@@ -83,6 +84,8 @@
 		0061168F1BA1103A00B5C54B /* AttributedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributedString.m; sourceTree = "<group>"; };
 		006116911BA132D900B5C54B /* BaseTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTextView.h; sourceTree = "<group>"; };
 		006116921BA132D900B5C54B /* BaseTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTextView.m; sourceTree = "<group>"; };
+		006116971BA1EEEF00B5C54B /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		006116981BA1EEEF00B5C54B /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
 		00D2C02E1B9E855D00DA5A7A /* HotelReservations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HotelReservations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D2C0321B9E855D00DA5A7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00D2C0331B9E855D00DA5A7A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -170,10 +173,12 @@
 		006116871BA0C62F00B5C54B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				006116881BA0C66F00B5C54B /* BaseTableView.h */,
-				006116891BA0C66F00B5C54B /* BaseTableView.m */,
+				006116971BA1EEEF00B5C54B /* BackgroundView.h */,
+				006116981BA1EEEF00B5C54B /* BackgroundView.m */,
 				006116911BA132D900B5C54B /* BaseTextView.h */,
 				006116921BA132D900B5C54B /* BaseTextView.m */,
+				006116881BA0C66F00B5C54B /* BaseTableView.h */,
+				006116891BA0C66F00B5C54B /* BaseTableView.m */,
 				0061168B1BA10CBD00B5C54B /* HotelTableViewCell.h */,
 				0061168C1BA10CBD00B5C54B /* HotelTableViewCell.m */,
 				0061168E1BA1103A00B5C54B /* AttributedString.h */,
@@ -361,6 +366,7 @@
 				00D2C03A1B9E855D00DA5A7A /* HotelReservations.xcdatamodeld in Sources */,
 				006116771BA0945D00B5C54B /* MenuViewController.m in Sources */,
 				006116901BA1103A00B5C54B /* AttributedString.m in Sources */,
+				006116991BA1EEEF00B5C54B /* BackgroundView.m in Sources */,
 				00D2C03D1B9E855D00DA5A7A /* HotelListViewController.m in Sources */,
 				0061167D1BA09D2600B5C54B /* RoomListViewController.m in Sources */,
 				00D2C0341B9E855D00DA5A7A /* main.m in Sources */,

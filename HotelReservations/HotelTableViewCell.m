@@ -8,6 +8,7 @@
 
 #import "HotelTableViewCell.h"
 #import "BaseTextView.h"
+#import "BackgroundView.h"
 #import "AttributedString.h"
 
 @interface HotelTableViewCell ()
@@ -47,7 +48,11 @@ NSString *constStars = @"✪✪✪✪✪✪✪";
 - (void)layoutSubviews {
   [super layoutSubviews];
 
-  [self.textView addToSuperViewWithStandardConstraints: self.contentView];
+  BackgroundView *backgroundView = [[BackgroundView alloc] init];
+  backgroundView.backgroundColor = [UIColor purpleColor];
+  [backgroundView addToSuperViewWithStandardConstraints: self.contentView];
+
+  [self.textView addToSuperViewWithConstraintsForBorder: backgroundView];
 }
 
 #pragma mark - Helper Methods
@@ -57,8 +62,7 @@ NSString *constStars = @"✪✪✪✪✪✪✪";
   self.textView.attributedText = [AttributedString stringFromHeadline: self.hotel.name subheadline: self.hotel.city body: stars footnote: nil];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+- (CGSize)sizeThatFits: (CGSize)size {
+  return [self.textView sizeThatFits:size];
 }
-
 @end
