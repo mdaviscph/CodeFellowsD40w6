@@ -62,8 +62,6 @@
   self.savedHotels = [self.moContext executeFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
-  } else {
-    //[self.tableView reloadData];
   }
 }
 
@@ -94,5 +92,106 @@
     [importedHotels addObject: [Hotel createUsingJSON: hotelDictionary]];
   }
 }
+
+- (NSInteger) fetchRoomCount {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Room"];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+  return [self.moContext countForFetchRequest: request error: &fetchError];
+}
+
+- (void) fetchRooms {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Room"];
+  self.savedRooms = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
+- (BOOL) saveRooms {
+  
+  BOOL saveOk = YES;
+  if (self.moContext.hasChanges) {
+    NSError *saveError;
+    saveOk = [self.moContext save: &saveError];
+    if (!saveOk || saveError) {
+      [AlertPopover alert: kErrorCoreDataSave withNSError: saveError controller: nil completion: nil];
+    }
+  }
+  return saveOk;
+}
+
+- (NSInteger) fetchGuestCount {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Guest"];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+  return [self.moContext countForFetchRequest: request error: &fetchError];
+}
+
+- (void) fetchGuests {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Guest"];
+  self.savedGuests = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
+- (BOOL) saveGuests {
+  
+  BOOL saveOk = YES;
+  if (self.moContext.hasChanges) {
+    NSError *saveError;
+    saveOk = [self.moContext save: &saveError];
+    if (!saveOk || saveError) {
+      [AlertPopover alert: kErrorCoreDataSave withNSError: saveError controller: nil completion: nil];
+    }
+  }
+  return saveOk;
+}
+
+- (NSInteger) fetchReservationCount {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Reservation"];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+  return [self.moContext countForFetchRequest: request error: &fetchError];
+}
+
+- (void) fetchReservations {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Reservation"];
+  self.savedReservations = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
+- (BOOL) saveReservations {
+  
+  BOOL saveOk = YES;
+  if (self.moContext.hasChanges) {
+    NSError *saveError;
+    saveOk = [self.moContext save: &saveError];
+    if (!saveOk || saveError) {
+      [AlertPopover alert: kErrorCoreDataSave withNSError: saveError controller: nil completion: nil];
+    }
+  }
+  return saveOk;
+}
+
+
 
 @end

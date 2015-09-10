@@ -11,6 +11,7 @@
 #import "RoomListViewController.h"
 #import "GuestListViewController.h"
 #import "ReservationListViewController.h"
+#import "CoreDataStack.h"
 
 @interface MenuViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -106,6 +107,11 @@ NSString *const menuItemReservations = @"Reservations";
   self.tableView.dataSource = self;
   self.tableView.delegate = self;
   [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"MenuCell"];
+
+  if ([[CoreDataStack sharedInstance] fetchHotelCount] == 0) {
+    [[CoreDataStack sharedInstance] loadSavedHotelsFromJSON];
+    [[CoreDataStack sharedInstance] saveHotels];
+  }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

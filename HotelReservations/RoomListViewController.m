@@ -7,13 +7,14 @@
 //
 
 #import "RoomListViewController.h"
+#import "BaseTableView.h"
 #import "Room.h"
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
 @interface RoomListViewController () <UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) BaseTableView *tableView;
 
 @end
 
@@ -23,7 +24,7 @@
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] init];
+    _tableView = [[BaseTableView alloc] init];
   }
   return _tableView;
 }
@@ -34,15 +35,9 @@
   NSLog(@"loading list view for Rooms");
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor whiteColor];
-  [rootView addSubview: self.tableView];
-  
-  [self.tableView setTranslatesAutoresizingMaskIntoConstraints: NO];
-  NSDictionary *viewsInfo = @{@"tableView" : self.tableView};
-  NSArray *tableViewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[tableView]|" options: 0  metrics: nil views: viewsInfo];
-  NSArray *tableViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[tableView]|" options: 0  metrics: nil views: viewsInfo];
-  [rootView addConstraints: tableViewVerticalConstraints];
-  [rootView addConstraints: tableViewHorizontalConstraints];
-  
+
+  [self.tableView addToSuperViewWithStandardConstraints: rootView];
+
   self.view = rootView;
 }
 
@@ -51,6 +46,15 @@
   
   self.tableView.dataSource = self;
   [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"RoomCell"];
+  
+  [[CoreDataStack sharedInstance] fetchRooms];
+  [self updateUI];
+}
+
+#pragma mark - Helper Methods
+
+-(void) updateUI {
+  [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource

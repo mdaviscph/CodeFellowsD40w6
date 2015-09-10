@@ -22,4 +22,16 @@
 - (BOOL) saveHotels;
 - (void) loadSavedHotelsFromJSON;
 
+- (NSInteger) fetchRoomCount;
+- (void) fetchRooms;
+- (BOOL) saveRooms;
+
+- (NSInteger) fetchGuestCount;
+- (void) fetchGuests;
+- (BOOL) saveGuests;
+
+- (NSInteger) fetchReservationCount;
+- (void) fetchReservations;
+- (BOOL) saveReservations;
+
 @end

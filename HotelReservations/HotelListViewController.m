@@ -7,6 +7,8 @@
 //
 
 #import "HotelListViewController.h"
+#import "BaseTableView.h"
+#import "HotelTableViewCell.h"
 #import "Hotel.h"
 #import "Room.h"
 #import "AppDelegate.h"
@@ -14,7 +16,7 @@
 
 @interface HotelListViewController () <UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) BaseTableView *tableView;
 
 @end
 
@@ -24,7 +26,7 @@
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] init];
+    _tableView = [[BaseTableView alloc] init];
   }
   return _tableView;
 }
@@ -35,14 +37,8 @@
   NSLog(@"loading list view for Hotels");
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor whiteColor];
-  [rootView addSubview: self.tableView];
-  
-  [self.tableView setTranslatesAutoresizingMaskIntoConstraints: NO];
-  NSDictionary *viewsInfo = @{@"tableView" : self.tableView};
-  NSArray *tableViewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[tableView]|" options: 0  metrics: nil views: viewsInfo];
-  NSArray *tableViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[tableView]|" options: 0  metrics: nil views: viewsInfo];
-  [rootView addConstraints: tableViewVerticalConstraints];
-  [rootView addConstraints: tableViewHorizontalConstraints];
+
+  [self.tableView addToSuperViewWithStandardConstraints: rootView];
   
   self.view = rootView;
 }
@@ -51,15 +47,19 @@
   [super viewDidLoad];
 
   self.tableView.dataSource = self;
-  [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"HotelCell"];
+  [self.tableView registerClass: [HotelTableViewCell class] forCellReuseIdentifier: @"HotelCell"];
+  self.tableView.estimatedRowHeight = 44;
+  self.tableView.rowHeight = 100; // UITableViewAutomaticDimension;
 
-  if ([[CoreDataStack sharedInstance] fetchHotelCount] == 0) {
-    [[CoreDataStack sharedInstance] loadSavedHotelsFromJSON];
-    [[CoreDataStack sharedInstance] saveHotels];
-  }
   [[CoreDataStack sharedInstance] fetchHotels];
+  [self updateUI];
 }
 
+#pragma mark - Helper Methods 
+
+-(void) updateUI {
+  [self.tableView reloadData];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -67,11 +67,10 @@
   return [CoreDataStack sharedInstance].savedHotels.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
+- (HotelTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  HotelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
   Hotel *hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
-  cell.textLabel.text = hotel.name;
-  cell.detailTextLabel.text = hotel.city;
+  cell.hotel = hotel;
   return cell;
 }
 
