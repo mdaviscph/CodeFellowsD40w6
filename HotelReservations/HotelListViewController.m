@@ -7,8 +7,9 @@
 //
 
 #import "HotelListViewController.h"
-#import "BaseTableView.h"
+#import "UIViewExtension.h"
 #import "HotelTableViewCell.h"
+#import "UIColorExtension.h"
 #import "Hotel.h"
 #import "Room.h"
 #import "AppDelegate.h"
@@ -16,7 +17,8 @@
 
 @interface HotelListViewController () <UITableViewDataSource>
 
-@property (strong, nonatomic) BaseTableView *tableView;
+@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -24,11 +26,20 @@
 
 #pragma mark - Private Property Getters, Setters
 
+- (UIView *)headerView {
+  if (!_headerView) {
+    _headerView = [[UIView alloc] init];
+    _headerView.backgroundColor = [UIColor almond];
+  }
+  return _headerView;
+}
+
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[BaseTableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
     _tableView.estimatedRowHeight = 44;
     _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.backgroundColor = [UIColor vanDykeBrown];
   }
   return _tableView;
 }
@@ -37,10 +48,12 @@
 
 - (void)loadView {
   NSLog(@"loading list view for Hotels");
+  
   UIView *rootView = [[UIView alloc] init];
-  rootView.backgroundColor = [UIColor whiteColor];
-
-  [self.tableView addToSuperViewWithStandardConstraints: rootView];
+  rootView.backgroundColor = [UIColor rawSienna];
+  
+  [self.headerView addToSuperViewWithStandardConstraints: rootView withFixedHeight: 200];
+  [self.tableView addToSuperViewWithStandardConstraints: rootView withStandardVerticalTopConstraintTo: self.headerView];
   
   self.view = rootView;
 }
@@ -69,9 +82,8 @@
 
 - (HotelTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   HotelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
-  Hotel *hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
-  
-  cell.hotel = hotel;
+
+  cell.hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
   return cell;
 }
 

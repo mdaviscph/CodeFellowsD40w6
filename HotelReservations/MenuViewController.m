@@ -11,6 +11,8 @@
 #import "RoomListViewController.h"
 #import "GuestListViewController.h"
 #import "ReservationListViewController.h"
+#import "UIViewExtension.h"
+#import "UIColorExtension.h"
 #import "CoreDataStack.h"
 
 @interface MenuViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -88,16 +90,10 @@ NSString *const menuItemReservations = @"Reservations";
 
 - (void)loadView {
   UIView *rootView = [[UIView alloc] init];
-  rootView.backgroundColor = [UIColor whiteColor];
-  [rootView addSubview: self.tableView];
+  rootView.backgroundColor = [UIColor tumbleweed];
   
-  [self.tableView setTranslatesAutoresizingMaskIntoConstraints: NO];
-  NSDictionary *viewsInfo = @{@"tableView" : self.tableView};
-  NSArray *tableViewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|-[tableView]-|" options: 0  metrics: nil views: viewsInfo];
-  NSArray *tableViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|-[tableView]-|" options: 0  metrics: nil views: viewsInfo];
-  [rootView addConstraints: tableViewVerticalConstraints];
-  [rootView addConstraints: tableViewHorizontalConstraints];
-  
+  [self.tableView addToSuperViewWithStandardConstraints: rootView];
+    
   self.view = rootView;
 }
 
@@ -117,6 +113,7 @@ NSString *const menuItemReservations = @"Reservations";
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear: animated];
   
+  // TODO - figure out how to release VCs
   self.menuItemsVC = nil;
 }
   
@@ -130,9 +127,6 @@ NSString *const menuItemReservations = @"Reservations";
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"MenuCell" forIndexPath: indexPath];
   cell.textLabel.text = self.menuItems[indexPath.row];
   
-//  CGFloat width = 300; // whatever your desired width is
-//  CGRect rect1 = [result boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-
   return cell;
 }
 

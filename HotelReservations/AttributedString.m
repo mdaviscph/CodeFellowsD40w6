@@ -11,17 +11,17 @@
 
 @implementation AttributedString
 
-+ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote {
++ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote color:(UIColor *) color {
   
   UIFont *headlineFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleHeadline];
   UIFont *subheadlineFont = [UIFont preferredFontForTextStyle: UIFontTextStyleSubheadline];
   UIFont *bodyFont        = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
   UIFont *footnoteFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
 
-  NSDictionary *headlineAttributes    = @{NSFontAttributeName : headlineFont,    NSForegroundColorAttributeName : [UIColor purpleColor]};
-  NSDictionary *subheadlineAttributes = @{NSFontAttributeName : subheadlineFont, NSForegroundColorAttributeName : [UIColor purpleColor]};
-  NSDictionary *bodyAttributes        = @{NSFontAttributeName : bodyFont,        NSForegroundColorAttributeName : [UIColor darkGrayColor]};
-  NSDictionary *footnoteAttributes    = @{NSFontAttributeName : footnoteFont,    NSForegroundColorAttributeName : [UIColor darkGrayColor]};
+  NSDictionary *headlineAttributes    = @{NSFontAttributeName : headlineFont,    NSForegroundColorAttributeName : color};
+  NSDictionary *subheadlineAttributes = @{NSFontAttributeName : subheadlineFont, NSForegroundColorAttributeName : color};
+  NSDictionary *bodyAttributes        = @{NSFontAttributeName : bodyFont,        NSForegroundColorAttributeName : color};
+  NSDictionary *footnoteAttributes    = @{NSFontAttributeName : footnoteFont,    NSForegroundColorAttributeName : color};
   
   NSString *headlineLine    = headline    ? [headline stringByAppendingString: @"\n"] : @"";
   NSString *subheadlineLine = subheadline ? [subheadline stringByAppendingString: @"\n"] : @"";

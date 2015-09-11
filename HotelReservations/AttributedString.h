@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "Hotel.h"
+@class UIColor;
 
 @interface AttributedString : NSObject
 
-+ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote;
++ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote color:(UIColor *)color;
 
 @end

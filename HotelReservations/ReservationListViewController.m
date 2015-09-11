@@ -7,14 +7,14 @@
 //
 
 #import "ReservationListViewController.h"
-#import "BaseTableView.h"
+#import "UIVIewExtension.h"
 #import "Reservation.h"
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
 @interface ReservationListViewController () <UITableViewDataSource>
 
-@property (strong, nonatomic) BaseTableView *tableView;
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -24,7 +24,7 @@
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[BaseTableView alloc] init];
+    _tableView = [[UITableView alloc] init];
   }
   return _tableView;
 }

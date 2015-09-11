@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		006116491B9F441100B5C54B /* HotelJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116481B9F441100B5C54B /* HotelJSONParse.m */; };
 		0061164C1B9F46A400B5C54B /* RoomJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061164B1B9F46A400B5C54B /* RoomJSONParse.m */; };
-		006116521B9F48B800B5C54B /* ModelConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116511B9F48B800B5C54B /* ModelConstants.m */; };
 		006116551B9F4C8700B5C54B /* JSONFileImport.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116541B9F4C8700B5C54B /* JSONFileImport.m */; };
 		006116641B9F5BB100B5C54B /* Hotel.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116631B9F5BB100B5C54B /* Hotel.m */; };
 		006116671B9F5BB200B5C54B /* Reservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116661B9F5BB200B5C54B /* Reservation.m */; };
@@ -22,11 +21,12 @@
 		006116801BA09D3500B5C54B /* GuestListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061167F1BA09D3500B5C54B /* GuestListViewController.m */; };
 		006116831BA09D4900B5C54B /* ReservationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116821BA09D4900B5C54B /* ReservationListViewController.m */; };
 		006116861BA0AE5600B5C54B /* CoreDataStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116851BA0AE5600B5C54B /* CoreDataStack.m */; };
-		0061168A1BA0C66F00B5C54B /* BaseTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116891BA0C66F00B5C54B /* BaseTableView.m */; };
 		0061168D1BA10CBD00B5C54B /* HotelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061168C1BA10CBD00B5C54B /* HotelTableViewCell.m */; };
 		006116901BA1103A00B5C54B /* AttributedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061168F1BA1103A00B5C54B /* AttributedString.m */; };
-		006116931BA132D900B5C54B /* BaseTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116921BA132D900B5C54B /* BaseTextView.m */; };
-		006116991BA1EEEF00B5C54B /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116981BA1EEEF00B5C54B /* BackgroundView.m */; };
+		006116991BA1EEEF00B5C54B /* UIViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116981BA1EEEF00B5C54B /* UIViewExtension.m */; };
+		0061169C1BA20DDC00B5C54B /* RoomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061169B1BA20DDC00B5C54B /* RoomTableViewCell.m */; };
+		006116A21BA23D5A00B5C54B /* UIColorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116A11BA23D5A00B5C54B /* UIColorExtension.m */; };
+		006116A51BA2490600B5C54B /* ViewUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116A41BA2490600B5C54B /* ViewUtility.m */; };
 		00D2C0341B9E855D00DA5A7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0331B9E855D00DA5A7A /* main.m */; };
 		00D2C0371B9E855D00DA5A7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0361B9E855D00DA5A7A /* AppDelegate.m */; };
 		00D2C03A1B9E855D00DA5A7A /* HotelReservations.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 00D2C0381B9E855D00DA5A7A /* HotelReservations.xcdatamodeld */; };
@@ -51,8 +51,6 @@
 		006116481B9F441100B5C54B /* HotelJSONParse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotelJSONParse.m; sourceTree = "<group>"; };
 		0061164A1B9F46A400B5C54B /* RoomJSONParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomJSONParse.h; sourceTree = "<group>"; };
 		0061164B1B9F46A400B5C54B /* RoomJSONParse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomJSONParse.m; sourceTree = "<group>"; };
-		006116501B9F48B800B5C54B /* ModelConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelConstants.h; sourceTree = "<group>"; };
-		006116511B9F48B800B5C54B /* ModelConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelConstants.m; sourceTree = "<group>"; };
 		006116531B9F4C8700B5C54B /* JSONFileImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONFileImport.h; sourceTree = "<group>"; };
 		006116541B9F4C8700B5C54B /* JSONFileImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONFileImport.m; sourceTree = "<group>"; };
 		006116621B9F5BB100B5C54B /* Hotel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotel.h; sourceTree = "<group>"; };
@@ -76,16 +74,18 @@
 		006116821BA09D4900B5C54B /* ReservationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReservationListViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		006116841BA0AE5600B5C54B /* CoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataStack.h; sourceTree = "<group>"; };
 		006116851BA0AE5600B5C54B /* CoreDataStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataStack.m; sourceTree = "<group>"; };
-		006116881BA0C66F00B5C54B /* BaseTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BaseTableView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		006116891BA0C66F00B5C54B /* BaseTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BaseTableView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		0061168B1BA10CBD00B5C54B /* HotelTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = HotelTableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		0061168C1BA10CBD00B5C54B /* HotelTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = HotelTableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		0061168E1BA1103A00B5C54B /* AttributedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedString.h; sourceTree = "<group>"; };
 		0061168F1BA1103A00B5C54B /* AttributedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributedString.m; sourceTree = "<group>"; };
-		006116911BA132D900B5C54B /* BaseTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTextView.h; sourceTree = "<group>"; };
-		006116921BA132D900B5C54B /* BaseTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTextView.m; sourceTree = "<group>"; };
-		006116971BA1EEEF00B5C54B /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
-		006116981BA1EEEF00B5C54B /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
+		006116971BA1EEEF00B5C54B /* UIVIewExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIVIewExtension.h; sourceTree = "<group>"; };
+		006116981BA1EEEF00B5C54B /* UIViewExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewExtension.m; sourceTree = "<group>"; };
+		0061169A1BA20DDC00B5C54B /* RoomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomTableViewCell.h; sourceTree = "<group>"; };
+		0061169B1BA20DDC00B5C54B /* RoomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomTableViewCell.m; sourceTree = "<group>"; };
+		006116A01BA23D5A00B5C54B /* UIColorExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIColorExtension.h; sourceTree = "<group>"; };
+		006116A11BA23D5A00B5C54B /* UIColorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIColorExtension.m; sourceTree = "<group>"; };
+		006116A31BA2490600B5C54B /* ViewUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtility.h; sourceTree = "<group>"; };
+		006116A41BA2490600B5C54B /* ViewUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtility.m; sourceTree = "<group>"; };
 		00D2C02E1B9E855D00DA5A7A /* HotelReservations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HotelReservations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D2C0321B9E855D00DA5A7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00D2C0331B9E855D00DA5A7A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -136,8 +136,6 @@
 				006116481B9F441100B5C54B /* HotelJSONParse.m */,
 				006116531B9F4C8700B5C54B /* JSONFileImport.h */,
 				006116541B9F4C8700B5C54B /* JSONFileImport.m */,
-				006116501B9F48B800B5C54B /* ModelConstants.h */,
-				006116511B9F48B800B5C54B /* ModelConstants.m */,
 				006116841BA0AE5600B5C54B /* CoreDataStack.h */,
 				006116851BA0AE5600B5C54B /* CoreDataStack.m */,
 			);
@@ -173,16 +171,18 @@
 		006116871BA0C62F00B5C54B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				006116971BA1EEEF00B5C54B /* BackgroundView.h */,
-				006116981BA1EEEF00B5C54B /* BackgroundView.m */,
-				006116911BA132D900B5C54B /* BaseTextView.h */,
-				006116921BA132D900B5C54B /* BaseTextView.m */,
-				006116881BA0C66F00B5C54B /* BaseTableView.h */,
-				006116891BA0C66F00B5C54B /* BaseTableView.m */,
+				0061169A1BA20DDC00B5C54B /* RoomTableViewCell.h */,
+				0061169B1BA20DDC00B5C54B /* RoomTableViewCell.m */,
 				0061168B1BA10CBD00B5C54B /* HotelTableViewCell.h */,
 				0061168C1BA10CBD00B5C54B /* HotelTableViewCell.m */,
 				0061168E1BA1103A00B5C54B /* AttributedString.h */,
 				0061168F1BA1103A00B5C54B /* AttributedString.m */,
+				006116A31BA2490600B5C54B /* ViewUtility.h */,
+				006116A41BA2490600B5C54B /* ViewUtility.m */,
+				006116971BA1EEEF00B5C54B /* UIVIewExtension.h */,
+				006116981BA1EEEF00B5C54B /* UIViewExtension.m */,
+				006116A01BA23D5A00B5C54B /* UIColorExtension.h */,
+				006116A11BA23D5A00B5C54B /* UIColorExtension.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -353,6 +353,7 @@
 				0061164C1B9F46A400B5C54B /* RoomJSONParse.m in Sources */,
 				006116551B9F4C8700B5C54B /* JSONFileImport.m in Sources */,
 				00D2C0371B9E855D00DA5A7A /* AppDelegate.m in Sources */,
+				006116A21BA23D5A00B5C54B /* UIColorExtension.m in Sources */,
 				006116641B9F5BB100B5C54B /* Hotel.m in Sources */,
 				006116671B9F5BB200B5C54B /* Reservation.m in Sources */,
 				0061168D1BA10CBD00B5C54B /* HotelTableViewCell.m in Sources */,
@@ -360,17 +361,16 @@
 				006116831BA09D4900B5C54B /* ReservationListViewController.m in Sources */,
 				006116801BA09D3500B5C54B /* GuestListViewController.m in Sources */,
 				0061166A1B9F5BB200B5C54B /* Guest.m in Sources */,
-				0061168A1BA0C66F00B5C54B /* BaseTableView.m in Sources */,
+				006116A51BA2490600B5C54B /* ViewUtility.m in Sources */,
 				006116721B9F663200B5C54B /* AlertPopover.m in Sources */,
-				006116521B9F48B800B5C54B /* ModelConstants.m in Sources */,
+				0061169C1BA20DDC00B5C54B /* RoomTableViewCell.m in Sources */,
 				00D2C03A1B9E855D00DA5A7A /* HotelReservations.xcdatamodeld in Sources */,
 				006116771BA0945D00B5C54B /* MenuViewController.m in Sources */,
 				006116901BA1103A00B5C54B /* AttributedString.m in Sources */,
-				006116991BA1EEEF00B5C54B /* BackgroundView.m in Sources */,
+				006116991BA1EEEF00B5C54B /* UIViewExtension.m in Sources */,
 				00D2C03D1B9E855D00DA5A7A /* HotelListViewController.m in Sources */,
 				0061167D1BA09D2600B5C54B /* RoomListViewController.m in Sources */,
 				00D2C0341B9E855D00DA5A7A /* main.m in Sources */,
-				006116931BA132D900B5C54B /* BaseTextView.m in Sources */,
 				006116861BA0AE5600B5C54B /* CoreDataStack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

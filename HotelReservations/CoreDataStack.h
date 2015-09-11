@@ -24,6 +24,8 @@
 
 - (NSInteger) fetchRoomCount;
 - (void) fetchRooms;
+- (void) fetchRoomsAscendingOnKey: (NSString *)key;
+- (void) fetchRoomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
 - (BOOL) saveRooms;
 
 - (NSInteger) fetchGuestCount;

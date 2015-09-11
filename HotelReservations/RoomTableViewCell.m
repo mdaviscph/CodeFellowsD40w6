@@ -1,33 +1,33 @@
 //
-//  HotelTableViewCell.m
+//  RoomTableViewCell.m
 //  HotelReservations
 //
-//  Created by mike davis on 9/9/15.
+//  Created by mike davis on 9/10/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
-#import "HotelTableViewCell.h"
+#import "RoomTableViewCell.h"
 #import "UIVIewExtension.h"
 #import "AttributedString.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
 
-@interface HotelTableViewCell ()
+@interface RoomTableViewCell ()
 
 @property (strong, nonatomic) UITextView *textView;
 
 @end
 
-@implementation HotelTableViewCell
+@implementation RoomTableViewCell
 
 #pragma mark - Public Property Getters, Setters
 
-@synthesize hotel = _hotel;
-- (Hotel *) hotel {
-  return _hotel;
+@synthesize room = _room;
+- (Room *) room {
+  return _room;
 }
-- (void) setHotel: (Hotel *)hotel {
-  _hotel = hotel;
+- (void) setRoom: (Room *)room {
+  _room = room;
   [self updateUI];
 }
 
@@ -38,7 +38,7 @@
     _textView = [[UITextView alloc] init];
     _textView.editable = NO;
     _textView.scrollEnabled = NO;
-    _textView.backgroundColor = [UIColor desertSand];
+    _textView.backgroundColor = [UIColor apricot];
   }
   return _textView;
 }
@@ -47,21 +47,22 @@
 
 - (void)layoutSubviews {
   [super layoutSubviews];
-
+  
   UIView *backgroundView = [[UIView alloc] init];
-  backgroundView.backgroundColor = [UIColor vanDykeBrown];
+  backgroundView.backgroundColor = [UIColor darkVenetianRed];
   [backgroundView addToSuperViewWithStandardConstraints: self.contentView];
-
+  
   [self.textView addToSuperViewWithConstraintsForBorder: backgroundView];
 }
 
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  self.textView.attributedText = [AttributedString stringFromHeadline: self.hotel.name subheadline: self.hotel.city body: [ViewUtility starRating: self.hotel.rating] footnote: nil color: [UIColor vanDykeBrown]];
+  self.textView.attributedText = [AttributedString stringFromHeadline: self.room.hotel.name subheadline: self.room.number body: [ViewUtility roomType: self.room.type] footnote: [ViewUtility dollarRating: self.room.type] color: [UIColor darkVenetianRed]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {
   return [self.textView sizeThatFits:size];
 }
+
 @end

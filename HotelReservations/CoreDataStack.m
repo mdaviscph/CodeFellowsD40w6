@@ -113,6 +113,32 @@
   }
 }
 
+- (void) fetchRoomsAscendingOnKey: (NSString *)key {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Room"];
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
+  request.sortDescriptors = @[sort];
+  self.savedRooms = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
+- (void) fetchRoomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: @"Room"];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", whereKey, value];
+  request.predicate = predicate;
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
+  request.sortDescriptors = @[sort];
+  self.savedRooms = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
 - (BOOL) saveRooms {
   
   BOOL saveOk = YES;
