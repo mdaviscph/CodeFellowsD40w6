@@ -36,7 +36,7 @@
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor whiteColor];
 
-  [self.tableView addToSuperViewWithStandardConstraints: rootView];
+  [self.tableView addToSuperViewWithConstraints: rootView];
 
   self.view = rootView;
 }

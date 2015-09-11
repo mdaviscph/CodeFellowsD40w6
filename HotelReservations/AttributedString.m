@@ -17,11 +17,12 @@
   UIFont *subheadlineFont = [UIFont preferredFontForTextStyle: UIFontTextStyleSubheadline];
   UIFont *bodyFont        = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
   UIFont *footnoteFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
-
-  NSDictionary *headlineAttributes    = @{NSFontAttributeName : headlineFont,    NSForegroundColorAttributeName : color};
-  NSDictionary *subheadlineAttributes = @{NSFontAttributeName : subheadlineFont, NSForegroundColorAttributeName : color};
-  NSDictionary *bodyAttributes        = @{NSFontAttributeName : bodyFont,        NSForegroundColorAttributeName : color};
-  NSDictionary *footnoteAttributes    = @{NSFontAttributeName : footnoteFont,    NSForegroundColorAttributeName : color};
+  
+  UIColor *textColor = color ? color : [UIColor blueColor];
+  NSDictionary *headlineAttributes    = @{NSFontAttributeName : headlineFont,    NSForegroundColorAttributeName : textColor};
+  NSDictionary *subheadlineAttributes = @{NSFontAttributeName : subheadlineFont, NSForegroundColorAttributeName : textColor};
+  NSDictionary *bodyAttributes        = @{NSFontAttributeName : bodyFont,        NSForegroundColorAttributeName : textColor};
+  NSDictionary *footnoteAttributes    = @{NSFontAttributeName : footnoteFont,    NSForegroundColorAttributeName : textColor};
   
   NSString *headlineLine    = headline    ? [headline stringByAppendingString: @"\n"] : @"";
   NSString *subheadlineLine = subheadline ? [subheadline stringByAppendingString: @"\n"] : @"";

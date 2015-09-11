@@ -13,5 +13,6 @@
 + (NSString *)starRating:(NSNumber *)rating;
 + (NSString *)dollarRating:(NSNumber *)rating;
 + (NSString *)roomType:(NSNumber *)type;
++ (NSArray *)roomTypes;
 
 @end

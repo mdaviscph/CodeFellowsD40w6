@@ -50,9 +50,9 @@
   
   UIView *backgroundView = [[UIView alloc] init];
   backgroundView.backgroundColor = [UIColor darkVenetianRed];
-  [backgroundView addToSuperViewWithStandardConstraints: self.contentView];
+  [backgroundView addToSuperViewWithConstraints: self.contentView];
   
-  [self.textView addToSuperViewWithConstraintsForBorder: backgroundView];
+  [self.textView addToSuperViewWithConstraintsForBorder: backgroundView verticalSpacing: 4 horizontalSpacing: 3];
 }
 
 #pragma mark - Helper Methods

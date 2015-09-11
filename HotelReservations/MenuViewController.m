@@ -92,7 +92,7 @@ NSString *const menuItemReservations = @"Reservations";
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor tumbleweed];
   
-  [self.tableView addToSuperViewWithStandardConstraints: rootView];
+  [self.tableView addToSuperViewWithConstraints: rootView];
     
   self.view = rootView;
 }

@@ -52,8 +52,8 @@
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor rawSienna];
   
-  [self.headerView addToSuperViewWithStandardConstraints: rootView withFixedHeight: 200];
-  [self.tableView addToSuperViewWithStandardConstraints: rootView withStandardVerticalTopConstraintTo: self.headerView];
+  [self.headerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 192 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.headerView height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
   self.view = rootView;
 }

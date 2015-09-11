@@ -10,6 +10,5 @@
 
 @interface HotelListViewController : UIViewController
 
-
 @end
 

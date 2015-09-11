@@ -10,9 +10,9 @@
 
 @interface UIView (AddConstraints)
 
-- (void) addToSuperViewWithStandardConstraints: (UIView *)superView;
-- (void) addToSuperViewWithStandardConstraints: (UIView *)superView withStandardVerticalTopConstraintTo: (UIView *)aboveView;
-- (void) addToSuperViewWithStandardConstraints: (UIView *)superView withFixedHeight: (CGFloat)height;
-- (void) addToSuperViewWithConstraintsForBorder: (UIView *)superView;
+- (void) addToSuperViewWithConstraints: (UIView *)superView;
+- (void) addToSuperViewWithConstraints: (UIView *)superView withViewAbove: (UIView *)topView height: (CGFloat)height topSpacing: (CGFloat)topSpacing bottomSpacing: (CGFloat)bottomSpacing width: (CGFloat)width leadingSpacing: (CGFloat)leadingSpacing trailingSpacing: (CGFloat)trailingSpacing;
+- (void) addToSuperViewWithConstraintsAndIntrinsicHeight: (UIView *)superView withViewAbove: (UIView *)topView topSpacing: (CGFloat)topSpacing bottomSpacing: (CGFloat)bottomSpacing width: (CGFloat)width leadingSpacing: (CGFloat)leadingSpacing trailingSpacing: (CGFloat)trailingSpacing;
+- (void) addToSuperViewWithConstraintsForBorder: (UIView *)superView verticalSpacing:(CGFloat)verticalSpacing horizontalSpacing:(CGFloat)horizontalSpacing;
 
 @end
