@@ -22,31 +22,31 @@
 
 + (NSString *)roomType:(NSNumber *)type {
   NSString *typeOfRoom;
-  switch (type.integerValue) {
-    case 0:
-      typeOfRoom = NSLocalizedString(@"Out of Service", @"room type description");
-      break;
-    case 1:
-      typeOfRoom = [ViewUtility roomTypes][0];
-      break;
-    case 2:
-      typeOfRoom = [ViewUtility roomTypes][1];
-      break;
-    case 3:
-      typeOfRoom = [ViewUtility roomTypes][2];
-      break;
-    case 4:
-      typeOfRoom = [ViewUtility roomTypes][3];
-      break;
-    default:
-      typeOfRoom = NSLocalizedString(@"Unknown", @"room type description");
-      break;
+  if (type.integerValue == -1) {
+    typeOfRoom = NSLocalizedString(@"Out of Service", @"room type description");
+  }
+  else if (type.integerValue >= 0 && type.integerValue < [ViewUtility roomTypes].count) {
+    typeOfRoom = [ViewUtility roomTypes][type.integerValue];
+  } else {
+    typeOfRoom = NSLocalizedString(@"Unknown", @"room type description");
   }
   return typeOfRoom;
 }
 
 + (NSArray *)roomTypes {
   return @[NSLocalizedString(@"Single Room, Queen Bed", @"room type description"), NSLocalizedString(@"Double Room, Two Twin Beds", @"room type description"), NSLocalizedString(@"One-Room Suite, King Bed", @"room type description"), NSLocalizedString(@"Two-Room Suite, King Beds", @"room type description")];
+}
+
++ (NSString *)clean:(BOOL)cleaned {
+  return cleaned ? NSLocalizedString(@"Clean Room", @"housekeeping status of room") : NSLocalizedString(@"Not Cleaned", @"housekeeping status of room");
+}
+
++ (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName {
+  return [[lastName stringByAppendingString: @", "] stringByAppendingString: firstName];
+}
+
++ (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate {
+  return @"duration...start...end...dates";
 }
 
 @end

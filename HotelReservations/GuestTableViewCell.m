@@ -1,33 +1,33 @@
 //
-//  HotelTableViewCell.m
-//  HotelReservations
+//  GuestTableViewCell.m
+//  GuestReservations
 //
-//  Created by mike davis on 9/9/15.
+//  Created by mike davis on 9/11/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
-#import "HotelTableViewCell.h"
+#import "GuestTableViewCell.h"
 #import "UIViewExtension.h"
 #import "AttributedString.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
 
-@interface HotelTableViewCell ()
+@interface GuestTableViewCell ()
 
 @property (strong, nonatomic) UITextView *textView;
 
 @end
 
-@implementation HotelTableViewCell
+@implementation GuestTableViewCell
 
 #pragma mark - Public Property Getters, Setters
 
-@synthesize hotel = _hotel;
-- (Hotel *) hotel {
-  return _hotel;
+@synthesize guest = _guest;
+- (Guest *) guest {
+  return _guest;
 }
-- (void) setHotel: (Hotel *)hotel {
-  _hotel = hotel;
+- (void) setGuest: (Guest *)guest {
+  _guest = guest;
   [self updateUI];
 }
 
@@ -47,18 +47,19 @@
 
 - (void)layoutSubviews {
   [super layoutSubviews];
-
+  
   UIView *backgroundView = [[UIView alloc] init];
   backgroundView.backgroundColor = [UIColor vanDykeBrown];
   [backgroundView addToSuperViewWithConstraints: self.contentView];
-
+  
   [self.textView addToSuperViewWithConstraintsForBorder: backgroundView verticalSpacing: 4 horizontalSpacing: 3];
 }
 
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  self.textView.attributedText = [AttributedString stringFromHeadline: self.hotel.name subheadline: self.hotel.city body: [ViewUtility starRating: self.hotel.rating] footnote: nil caption: nil color: [UIColor vanDykeBrown]];
+  NSString *name = [ViewUtility nameWithLast: self.guest.lastName first: self.guest.firstName];
+  self.textView.attributedText = [AttributedString stringFromHeadline: name subheadline: self.guest.city body: self.guest.state footnote: nil caption: nil color: [UIColor vanDykeBrown]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {

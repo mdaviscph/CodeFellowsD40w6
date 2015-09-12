@@ -14,5 +14,8 @@
 + (NSString *)dollarRating:(NSNumber *)rating;
 + (NSString *)roomType:(NSNumber *)type;
 + (NSArray *)roomTypes;
++ (NSString *)clean:(BOOL)cleaned;
++ (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName;
++ (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate;
 
 @end

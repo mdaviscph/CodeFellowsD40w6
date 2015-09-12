@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
-#import "UIVIewExtension.h"
+#import "UIViewExtension.h"
 
 @implementation UIView (AddConstraints)
 

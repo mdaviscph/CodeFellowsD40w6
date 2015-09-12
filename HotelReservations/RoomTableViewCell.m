@@ -7,7 +7,8 @@
 //
 
 #import "RoomTableViewCell.h"
-#import "UIVIewExtension.h"
+#import "Hotel.h"
+#import "UIViewExtension.h"
 #import "AttributedString.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
@@ -58,11 +59,11 @@
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  self.textView.attributedText = [AttributedString stringFromHeadline: self.room.hotel.name subheadline: self.room.number body: [ViewUtility roomType: self.room.type] footnote: [ViewUtility dollarRating: self.room.type] color: [UIColor darkVenetianRed]];
+  self.textView.attributedText = [AttributedString stringFromHeadline: self.room.hotel.name subheadline: self.room.number body: [ViewUtility roomType: self.room.type] footnote: [ViewUtility dollarRating: self.room.type] caption: [ViewUtility clean: self.room.clean.boolValue] color: [UIColor darkVenetianRed]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {
-  return [self.textView sizeThatFits:size];
+  return [self.textView sizeThatFits: size];
 }
 
 @end

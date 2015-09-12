@@ -40,7 +40,14 @@ NSString *const kStatusCodeErrorFormat = @"%@ (%ld)";
 
 + (void) alert: (NSString *)title withNSError: (NSError *)error controller: (UIViewController *)parent completion: (void(^)(void)) handler {
   
-  [AlertPopover presentAlert: title message: error.localizedDescription parent: parent handler: handler];
+  NSString *message = error.localizedDescription;
+  if (error.userInfo) {
+    NSArray *detailedErrors = error.userInfo[@"NSDetailedErrors"];
+    for (NSError *detailedError in detailedErrors) {
+      message = [[message stringByAppendingString: @"\n"] stringByAppendingString: detailedError.localizedDescription];
+    }
+  }
+  [AlertPopover presentAlert: title message: message parent: parent handler: handler];
 }
 
 + (void) alert: (NSString *)title withStatusCode: (NSInteger)statusCode controller: (UIViewController *)parent completion: (void(^)(void)) handler {

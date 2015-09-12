@@ -19,7 +19,7 @@
   
   hotel.name = jsonDictionary[@"name"];
   hotel.rating = jsonDictionary[@"stars"];
-  hotel.city = jsonDictionary[@"location"];
+  hotel.city = jsonDictionary[@"city"];
   hotel.state = @"WA";
   
   NSArray *roomDictionaries = jsonDictionary[@"rooms"];

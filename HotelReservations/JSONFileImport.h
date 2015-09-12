@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const kAssociatedObjectReservationHotelKey;
+
 @interface JSONFileImport : NSObject
 
 + (NSData *) loadJSONFileInBundle: (NSString *)fileName withFileType: (NSString *)fileType;
+
++ (NSMutableArray *) loadSavedHotelsFromJSON;
++ (NSMutableArray *) loadSavedGuestsFromJSON;
+
++ (void) relateHotels:(NSArray *)importedHotels toGuests:(NSArray *)importedGuests;
++ (void) relateGuests:(NSArray *)importedGuests toHotels:(NSArray *)importedHotels;
 
 @end

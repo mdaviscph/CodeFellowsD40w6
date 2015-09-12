@@ -141,15 +141,11 @@
                 "reservations" : [
                                     {
                                     "arrival" : "20150922",
-                                    "departure" : "20150924",
-                                    "roomType" : 0,
-                                    "hotel" : "Solid Stay"
+                                    "departure" : "20150924"
                                     },
                                     {
                                     "arrival" : "20151021",
-                                    "departure" : "20151028",
-                                    "roomType" : 0,
-                                    "hotel" : "Decent Inn"
+                                    "departure" : "20151028"
                                     }
                                   ]
                 },
@@ -160,9 +156,7 @@
                 "reservations" : [
                                     {
                                     "arrival" : "20150922",
-                                    "departure" : "20150924",
-                                    "roomType" : 2,
-                                    "hotel" : "Okay Motel"
+                                    "departure" : "20150924"
                                     }
                                   ]
                 },
@@ -173,15 +167,11 @@
                 "reservations" : [
                                     {
                                     "arrival" : "20150918",
-                                    "departure" : "20150924",
-                                    "roomType" : 3,
-                                    "hotel" : "Fancy Estates"
+                                    "departure" : 20150924
                                     },
                                     {
                                     "arrival" : "20151021",
-                                    "departure" : "20151028",
-                                    "roomType" : 3,
-                                    "hotel" : "Fancy Estates"
+                                    "departure" : "20151028"
                                     }
                                   ]
                 },
@@ -192,27 +182,19 @@
                 "reservations" : [
                                     {
                                     "arrival" : "20151002",
-                                    "departure" : "20151012",
-                                    "roomType" : 0,
-                                    "hotel" : "Solid Stay"
+                                    "departure" : "20151012"
                                     },
                                     {
                                     "arrival" : "20151021",
-                                    "departure" : "20151028",
-                                    "roomType" : 1,
-                                    "hotel" : "Solid Stay"
+                                    "departure" : "20151028"
                                     },
                                     {
                                     "arrival" : "20151111",
-                                    "departure" : "20151112",
-                                    "roomType" : 2,
-                                    "hotel" : "Solid Stay"
+                                    "departure" : "20151112"
                                     },
                                     {
                                     "arrival" : "20151119",
-                                    "departure" : "20151201",
-                                    "roomType" : 3,
-                                    "hotel" : "Solid Stay"
+                                    "departure" : "20151201"
                                     }
                                   ]
                 }

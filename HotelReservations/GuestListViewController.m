@@ -7,13 +7,19 @@
 //
 
 #import "GuestListViewController.h"
-#import "UIVIewExtension.h"
+#import "GuestTableViewCell.h"
+#import "UIViewExtension.h"
+#import "UIColorExtension.h"
+#import "ViewUtility.h"
+#import "AttributedString.h"
 #import "Guest.h"
+#import "Reservation.h"
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
 @interface GuestListViewController () <UITableViewDataSource>
 
+@property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UITableView *tableView;
 
 @end
@@ -22,9 +28,20 @@
 
 #pragma mark - Private Property Getters, Setters
 
+- (UIView *)headerView {
+  if (!_headerView) {
+    _headerView = [[UIView alloc] init];
+    _headerView.backgroundColor = [UIColor almond];
+  }
+  return _headerView;
+}
+
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] init];
+    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
+    _tableView.estimatedRowHeight = 44;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.backgroundColor = [UIColor vanDykeBrown];
   }
   return _tableView;
 }
@@ -33,10 +50,12 @@
 
 - (void)loadView {
   NSLog(@"loading list view for Guests");
+  
   UIView *rootView = [[UIView alloc] init];
-  rootView.backgroundColor = [UIColor whiteColor];
-
-  [self.tableView addToSuperViewWithConstraints: rootView];
+  rootView.backgroundColor = [UIColor rawSienna];
+  
+  [self.headerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 192 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.headerView height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
 
   self.view = rootView;
 }
@@ -45,7 +64,7 @@
   [super viewDidLoad];
   
   self.tableView.dataSource = self;
-  [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"GuestCell"];
+  [self.tableView registerClass: [GuestTableViewCell class] forCellReuseIdentifier: @"GuestCell"];
   
   [[CoreDataStack sharedInstance] fetchGuests];
   [self updateUI];
@@ -64,10 +83,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"GuestCell" forIndexPath: indexPath];
-  Guest *guest = [CoreDataStack sharedInstance].savedGuests[indexPath.row];
-  cell.textLabel.text = guest.lastName;
-  
+  GuestTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"GuestCell" forIndexPath: indexPath];
+
+  cell.guest = [CoreDataStack sharedInstance].savedGuests[indexPath.row];
   return cell;
 }
 

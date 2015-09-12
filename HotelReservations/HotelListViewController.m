@@ -7,9 +7,11 @@
 //
 
 #import "HotelListViewController.h"
-#import "UIViewExtension.h"
 #import "HotelTableViewCell.h"
+#import "UIViewExtension.h"
 #import "UIColorExtension.h"
+#import "ViewUtility.h"
+#import "AttributedString.h"
 #import "Hotel.h"
 #import "Room.h"
 #import "AppDelegate.h"
@@ -80,7 +82,7 @@
   return [CoreDataStack sharedInstance].savedHotels.count;
 }
 
-- (HotelTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   HotelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
 
   cell.hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];

@@ -2,7 +2,7 @@
 //  Reservation.m
 //  HotelReservations
 //
-//  Created by mike davis on 9/8/15.
+//  Created by mike davis on 9/12/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
@@ -15,7 +15,8 @@
 
 @dynamic arrival;
 @dynamic departure;
-@dynamic hotel;
+@dynamic roomType;
 @dynamic guest;
+@dynamic hotel;
 
 @end

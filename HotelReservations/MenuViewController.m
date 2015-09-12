@@ -13,6 +13,7 @@
 #import "ReservationListViewController.h"
 #import "UIViewExtension.h"
 #import "UIColorExtension.h"
+#import "JSONFileImport.h"
 #import "CoreDataStack.h"
 
 @interface MenuViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -104,9 +105,17 @@ NSString *const menuItemReservations = @"Reservations";
   self.tableView.delegate = self;
   [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"MenuCell"];
 
+  NSArray *importedHotels;
+  NSArray *importedGuests;
   if ([[CoreDataStack sharedInstance] fetchHotelCount] == 0) {
-    [[CoreDataStack sharedInstance] loadSavedHotelsFromJSON];
-    [[CoreDataStack sharedInstance] saveHotels];
+    importedHotels = [JSONFileImport loadSavedHotelsFromJSON];
+  }
+  if ([[CoreDataStack sharedInstance] fetchGuestCount] == 0) {
+    importedGuests = [JSONFileImport loadSavedGuestsFromJSON];
+  }
+  if (importedHotels || importedGuests) {
+    [JSONFileImport relateGuests: importedGuests toHotels: importedHotels];
+    [[CoreDataStack sharedInstance] saveAll];
   }
 }
 

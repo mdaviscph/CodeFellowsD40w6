@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Hotel.h"
 @class UIColor;
 
 @interface AttributedString : NSObject
 
-+ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote color:(UIColor *)color;
++ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote caption:(NSString *)caption color:(UIColor *)color;
+
 
 @end

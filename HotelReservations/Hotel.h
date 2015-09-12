@@ -2,7 +2,7 @@
 //  Hotel.h
 //  HotelReservations
 //
-//  Created by mike davis on 9/8/15.
+//  Created by mike davis on 9/12/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
@@ -17,20 +17,21 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * rating;
 @property (nonatomic, retain) NSString * state;
-@property (nonatomic, retain) NSSet *rooms;
+@property (nonatomic, retain) NSString * detail;
 @property (nonatomic, retain) NSSet *reservations;
+@property (nonatomic, retain) NSSet *rooms;
 @end
 
 @interface Hotel (CoreDataGeneratedAccessors)
-
-- (void)addRoomsObject:(Room *)value;
-- (void)removeRoomsObject:(Room *)value;
-- (void)addRooms:(NSSet *)values;
-- (void)removeRooms:(NSSet *)values;
 
 - (void)addReservationsObject:(Reservation *)value;
 - (void)removeReservationsObject:(Reservation *)value;
 - (void)addReservations:(NSSet *)values;
 - (void)removeReservations:(NSSet *)values;
+
+- (void)addRoomsObject:(Room *)value;
+- (void)removeRoomsObject:(Room *)value;
+- (void)addRooms:(NSSet *)values;
+- (void)removeRooms:(NSSet *)values;
 
 @end

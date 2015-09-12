@@ -17,23 +17,22 @@
 
 + (instancetype)sharedInstance;
 
+- (BOOL) saveAll;
+
 - (NSInteger) fetchHotelCount;
 - (void) fetchHotels;
-- (BOOL) saveHotels;
-- (void) loadSavedHotelsFromJSON;
 
 - (NSInteger) fetchRoomCount;
 - (void) fetchRooms;
 - (void) fetchRoomsAscendingOnKey: (NSString *)key;
 - (void) fetchRoomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
-- (BOOL) saveRooms;
 
 - (NSInteger) fetchGuestCount;
 - (void) fetchGuests;
-- (BOOL) saveGuests;
 
 - (NSInteger) fetchReservationCount;
 - (void) fetchReservations;
-- (BOOL) saveReservations;
+- (void) fetchReservationsAscendingOnKey: (NSString *)key;
+- (void) fetchReservationsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
 
 @end

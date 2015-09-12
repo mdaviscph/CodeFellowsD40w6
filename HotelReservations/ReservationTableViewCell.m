@@ -1,33 +1,35 @@
 //
-//  HotelTableViewCell.m
+//  ReservationTableViewCell.m
 //  HotelReservations
 //
-//  Created by mike davis on 9/9/15.
+//  Created by mike davis on 9/11/15.
 //  Copyright (c) 2015 mike davis. All rights reserved.
 //
 
-#import "HotelTableViewCell.h"
+#import "ReservationTableViewCell.h"
+#import "Guest.h"
+#import "Hotel.h"
 #import "UIViewExtension.h"
 #import "AttributedString.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
 
-@interface HotelTableViewCell ()
+@interface ReservationTableViewCell ()
 
 @property (strong, nonatomic) UITextView *textView;
 
 @end
 
-@implementation HotelTableViewCell
+@implementation ReservationTableViewCell
 
 #pragma mark - Public Property Getters, Setters
 
-@synthesize hotel = _hotel;
-- (Hotel *) hotel {
-  return _hotel;
+@synthesize reservation = _reservation;
+- (Reservation *) reservation {
+  return _reservation;
 }
-- (void) setHotel: (Hotel *)hotel {
-  _hotel = hotel;
+- (void) setReservation: (Reservation *)reservation {
+  _reservation = reservation;
   [self updateUI];
 }
 
@@ -38,7 +40,7 @@
     _textView = [[UITextView alloc] init];
     _textView.editable = NO;
     _textView.scrollEnabled = NO;
-    _textView.backgroundColor = [UIColor desertSand];
+    _textView.backgroundColor = [UIColor apricot];
   }
   return _textView;
 }
@@ -47,21 +49,25 @@
 
 - (void)layoutSubviews {
   [super layoutSubviews];
-
+  
   UIView *backgroundView = [[UIView alloc] init];
-  backgroundView.backgroundColor = [UIColor vanDykeBrown];
+  backgroundView.backgroundColor = [UIColor darkVenetianRed];
   [backgroundView addToSuperViewWithConstraints: self.contentView];
-
+  
   [self.textView addToSuperViewWithConstraintsForBorder: backgroundView verticalSpacing: 4 horizontalSpacing: 3];
 }
 
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  self.textView.attributedText = [AttributedString stringFromHeadline: self.hotel.name subheadline: self.hotel.city body: [ViewUtility starRating: self.hotel.rating] footnote: nil caption: nil color: [UIColor vanDykeBrown]];
+  
+#pragma mark TODO here
+  NSString *name = [ViewUtility nameWithLast: self.reservation.guest.lastName first: self.reservation.guest.firstName];
+  self.textView.attributedText = [AttributedString stringFromHeadline: name subheadline: self.reservation.hotel.name body: [ViewUtility datesWithDurationFromStart: self.reservation.arrival end: self.reservation.departure] footnote: [ViewUtility roomType: @(1)/* TODO: self.reservation.room.type*/] caption: nil color: [UIColor darkVenetianRed]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {
   return [self.textView sizeThatFits: size];
 }
+
 @end

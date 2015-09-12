@@ -8,7 +8,7 @@
 
 #import "RoomListViewController.h"
 #import "RoomTableViewCell.h"
-#import "UIVIewExtension.h"
+#import "UIViewExtension.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
 #import "AttributedString.h"
@@ -47,7 +47,7 @@
 
 - (UIPickerView *)pickerView {
   if (!_pickerView) {
-    _pickerView = [[UIPickerView alloc] init];
+    _pickerView = [[UIPickerView alloc] initWithFrame: CGRectMake(0,0,320,162)];
     _pickerView.backgroundColor = [UIColor peach];
   }
   return _pickerView;
@@ -73,7 +73,7 @@
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor venetianRed];
 
-  [self.headerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 250 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.headerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 220 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.headerView height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.numberLabel addToSuperViewWithConstraintsAndIntrinsicHeight: self.headerView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.pickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.headerView withViewAbove: self.numberLabel topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
@@ -91,14 +91,15 @@
   self.tableView.dataSource = self;
   [self.tableView registerClass: [RoomTableViewCell class] forCellReuseIdentifier: @"RoomCell"];
   
-  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @2];
+  [self.pickerView selectRow: 1 inComponent: 0 animated: YES];
+  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(1)];
   [self updateUI];
 }
 
 #pragma mark - Helper Methods
 
 -(void) updateUI {
-  self.numberLabel.attributedText = [AttributedString stringFromHeadline: @"test" subheadline: nil body: nil footnote: nil color: [UIColor darkVenetianRed]];
+  self.numberLabel.attributedText = [AttributedString stringFromHeadline: @"test" subheadline: nil body: nil footnote: nil caption: nil color: [UIColor darkVenetianRed]];
   [self.tableView reloadData];
 }
 
@@ -108,7 +109,7 @@
   return [CoreDataStack sharedInstance].savedRooms.count;
 }
 
-- (RoomTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   RoomTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"RoomCell" forIndexPath: indexPath];
 
   cell.room = [CoreDataStack sharedInstance].savedRooms[indexPath.row];
@@ -128,11 +129,18 @@
 #pragma mark - UIPickerViewDelegate
 
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return [AttributedString stringFromHeadline: nil subheadline: nil body: nil footnote: [ViewUtility roomTypes][row] color: [UIColor darkVenetianRed]];
+  return [AttributedString stringFromHeadline: nil subheadline: nil body: nil footnote: nil caption: [ViewUtility roomTypes][row] color: [UIColor darkVenetianRed]];
 }
+
+//- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
+//  NSLog(@"%.2f", pickerView.bounds.size.height);
+//  return pickerView.bounds.size.height/10;
+//}
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
   NSLog(@"picker selected: %@", [ViewUtility roomTypes][row]);
+  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(row)];
+  [self updateUI];
 }
 
 @end

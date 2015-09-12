@@ -17,10 +17,8 @@
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
   Room *room = [NSEntityDescription insertNewObjectForEntityForName: @"Room" inManagedObjectContext: context];
   
-  NSNumber *number = jsonDictionary[@"number"];
-  room.number = number.stringValue;
-  NSNumber *beds = jsonDictionary[@"beds"];
-  room.type = beds;
+  room.number = jsonDictionary[@"number"];
+  room.type = jsonDictionary[@"type"];
   room.rate = jsonDictionary[@"rate"];
   
   room.hotel = hotel;
