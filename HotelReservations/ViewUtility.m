@@ -45,6 +45,10 @@
   return [NSString stringWithFormat: NSLocalizedString(@"%lu rooms of type", @"count of rooms of specific type"), (unsigned long)count];
 }
 
++ (NSString *)roomNumber:(NSString *)number {
+  return [NSString stringWithFormat: NSLocalizedString(@"Room: %@", @"room number"), number];
+}
+
 + (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName {
   return [[lastName stringByAppendingString: @", "] stringByAppendingString: firstName];
 }
@@ -60,5 +64,4 @@
   dateFormatter.dateFormat = @"MM/dd/yyyy";
   return [dateFormatter stringFromDate: date];
 }
-
 @end

@@ -27,8 +27,9 @@
 
 - (NSInteger) fetchRoomCount;
 - (void) fetchRooms;
-- (void) fetchRoomsAscendingOnKey: (NSString *)key;
-- (NSArray *) roomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
+- (void) fetchRoomsAscendingOnKey:(NSString *)key;
+- (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys whereKey:(NSString *)whereKey isEqualTo:(id)value;
+- (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value;
 
 - (NSInteger) fetchGuestCount;
 - (void) fetchGuests;

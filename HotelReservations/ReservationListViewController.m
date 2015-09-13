@@ -14,6 +14,7 @@
 #import "AttributedString.h"
 #import "Guest.h"
 #import "Hotel.h"
+#import "Room.h"
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
@@ -171,6 +172,17 @@ typedef enum PickerType PickerType;
   [self.tableView reloadData];
 }
 
+- (void)nslogHotels:(NSArray *)hotels {
+  for (Hotel *hotel in hotels) {
+    for (Room *room in hotel.rooms) {
+      NSLog(@"Hotel %@ room %@", hotel.name, room.number);
+    }
+    for (Reservation *reservation in hotel.reservations) {
+      NSLog(@"Hotel %@ reservation guest %@ arrival %@ departure %@", hotel.name, reservation.guest.lastName, reservation.arrival, reservation.departure);
+    }
+  }
+}
+
 #pragma mark - Selector Methods
 
 - (void)addButtonTapped {
@@ -218,7 +230,7 @@ typedef enum PickerType PickerType;
   
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   if (self.newReservation) {
-    return self.queryHotels.count;
+    return self.queryRooms.count;
   } else {
     return [CoreDataStack sharedInstance].savedReservations.count;
   }
@@ -229,14 +241,11 @@ typedef enum PickerType PickerType;
   AttributedString *atString = [[AttributedString alloc] init];
   
   if (self.newReservation) {
-    Hotel* hotel = self.queryHotels[indexPath.row];
+    Room* room = self.queryRooms[indexPath.row];
 
-    [atString assignHeadline: hotel.name withSelector: nil];
-    [atString assignHeadline2: [ViewUtility starRating: hotel.rating] withSelector: nil];
-    [atString assignSubheadline: hotel.city withSelector: nil];
-    [atString assignSubheadline2: hotel.state withSelector: nil];
-    [atString assignBody: [ViewUtility roomCount: hotel.rooms.count] withSelector: nil];
-    [atString assignBody2: [ViewUtility roomType: self.selectedRoomType] withSelector: nil];
+    [atString assignHeadline: [ViewUtility roomNumber: room.number] withSelector: nil];
+    [atString assignHeadline2: room.hotel.name withSelector: nil];
+    [atString assignCaption: [ViewUtility roomType: self.selectedRoomType] withSelector: nil];
   } else {
     Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
     
@@ -318,7 +327,8 @@ typedef enum PickerType PickerType;
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
   if (pickerView.tag == RoomPicker) {
     self.selectedRoomType = @(row);
-    self.queryHotels = [[CoreDataStack sharedInstance] hotelsAscendingOnKey: @"name" subQueryKey: @"rooms" subQueryWhereKey: @"type" isEqualTo: self.selectedRoomType];
+    self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] whereKey: @"type" isEqualTo: self.selectedRoomType];
+    [self nslogHotels: self.queryHotels];
   } else if (pickerView.tag == GuestPicker) {
     self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests[row];
   }
