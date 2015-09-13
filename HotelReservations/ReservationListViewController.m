@@ -17,12 +17,24 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
+enum PickerType {
+  RoomPicker  = 1,
+  GuestPicker = 2
+};
+typedef enum PickerType PickerType;
+
 @interface ReservationListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIView *selectionView;
-@property (strong, nonatomic) UIPickerView *pickerView;
+@property (strong, nonatomic) UIPickerView *roomTypePickerView;
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) NSNumber *selectedRoomType;
+@property (strong, nonatomic) NSArray *queryGuests;
+@property (strong, nonatomic) NSArray *queryReservations;
+@property (strong, nonatomic) NSArray *queryHotels;
+@property (strong, nonatomic) NSArray *queryRooms;
 
 @end
 
@@ -32,10 +44,6 @@
 
 @synthesize selectedReservation = _selectedReservation;
 - (Reservation *)selectedReservation {
-  if (!_selectedReservation) {
-    NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
-    _selectedReservation = [NSEntityDescription insertNewObjectForEntityForName: @"Reservation" inManagedObjectContext: context];
-  }
   return _selectedReservation;
 }
 - (void) setSelectedReservation:(Reservation *)selectedReservation {
@@ -45,9 +53,20 @@
 
 #pragma mark - Private Property Getters, Setters
 
+- (NSNumber *)selectedRoomType {
+  if (!_selectedRoomType) {
+    _selectedRoomType = [[NSNumber alloc] init];
+    _selectedRoomType = @(1);
+  }
+  return _selectedRoomType;
+}
+
 - (UIView *)textView {
   if (!_textView) {
     _textView = [[UITextView alloc] init];
+    _textView.editable = NO;
+    _textView.selectable = NO;
+    _textView.scrollEnabled = NO;
     _textView.backgroundColor = [UIColor peach];
   }
   return _textView;
@@ -61,17 +80,19 @@
   return _selectionView;
 }
 
-- (UIPickerView *)pickerView {
-  if (!_pickerView) {
-    _pickerView = [[UIPickerView alloc] init];
-    _pickerView.backgroundColor = [UIColor peach];
+- (UIPickerView *)roomTypePickerView {
+  if (!_roomTypePickerView) {
+    _roomTypePickerView = [[UIPickerView alloc] init];
+    _roomTypePickerView.backgroundColor = [UIColor peach];
+    _roomTypePickerView.tag = RoomPicker;
   }
-  return _pickerView;
+  return _roomTypePickerView;
 }
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
+    _tableView.allowsSelection = YES;
     _tableView.estimatedRowHeight = 44;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.backgroundColor = [UIColor darkVenetianRed];
@@ -89,12 +110,18 @@
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor venetianRed];
   
-//  [self.textView addToSuperViewWithConstraintsAndIntrinsicHeight: rootView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 60 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 162 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.selectionView height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  UIView* spacer1 = [[UIView alloc] init];
+  spacer1.backgroundColor = [UIColor middleRed];
+  UIView* spacer2 = [[UIView alloc] init];
+  spacer2.backgroundColor = [UIColor middleRed];
 
-  [self.pickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [spacer1 addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: spacer1 height: 80 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [spacer2 addToSuperViewWithConstraints: rootView withViewAbove: self.selectionView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: spacer2 height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+
+  [self.roomTypePickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
 
   self.view = rootView;
 }
@@ -102,17 +129,29 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
+  self.navigationItem.title = @"Reservations";
+  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
+
   self.textView.delegate = self;
   
-  self.pickerView.dataSource = self;
-  self.pickerView.delegate = self;
+  self.roomTypePickerView.dataSource = self;
+  self.roomTypePickerView.delegate = self;
   
   self.tableView.dataSource = self;
   self.tableView.delegate = self;
   [self.tableView registerClass: [ReservationTableViewCell class] forCellReuseIdentifier: @"ReservationCell"];
   
-  [self.pickerView selectRow: 1 inComponent: 0 animated: YES];
-  [[CoreDataStack sharedInstance] fetchReservationsAscendingOnKey: @"arrival"];
+  self.roomTypePickerView.hidden = YES;
+  
+  //self.queryGuests = [CoreDataStack sharedInstance].savedGuests;
+  //self.queryReservations = [CoreDataStack sharedInstance].savedReservations;
+  //self.queryHotels = [CoreDataStack sharedInstance].savedHotels;
+  //self.queryRooms = [CoreDataStack sharedInstance].savedRooms;
+  
+  if ([[CoreDataStack sharedInstance] fetchReservationCount] > 0) {
+    [[CoreDataStack sharedInstance] fetchReservations];
+    self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[0];
+  }
   [self updateUI];
 }
 
@@ -128,37 +167,86 @@
   [atString assignBody2: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: @"roomTypeTapped"];
   
   self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
+
   [self.tableView reloadData];
 }
 
 #pragma mark - Selector Methods
 
+- (void)addButtonTapped {
+  self.newReservation = YES;
+  self.textView.selectable = YES;
+  NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+  self.selectedReservation = [NSEntityDescription insertNewObjectForEntityForName: @"Reservation" inManagedObjectContext: context];
+  UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
+  self.navigationItem.rightBarButtonItem = saveButton;
+}
+- (void)saveButtonTapped {
+  self.newReservation = NO;
+  self.textView.selectable = YES;
+  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
+  [[CoreDataStack sharedInstance] saveAll];
+}
+
 - (void)guestTapped {
-  
+  self.roomTypePickerView.hidden = YES;
+//  [self.guestPickerView selectRow: 1 inComponent: 0 animated: YES];
+  [self updateUI];
 }
 - (void)arrivalTapped {
-  
+  self.roomTypePickerView.hidden = YES;
+//  [self.roomTypePickerView selectRow: 1 inComponent: 0 animated: YES];
+  [self updateUI];
 }
 - (void)departureTapped {
-  
+  self.roomTypePickerView.hidden = YES;
+//  [self.roomTypePickerView selectRow: 1 inComponent: 0 animated: YES];
+  [self updateUI];
 }
 - (void)hotelTapped {
-  
+  self.roomTypePickerView.hidden = YES;
+//  [self.roomTypePickerView selectRow: 1 inComponent: 0 animated: YES];
+  [self updateUI];
 }
 - (void)roomTypeTapped {
-  
+  self.roomTypePickerView.hidden = NO;
+  [self.roomTypePickerView selectRow: 1 inComponent: 0 animated: YES];
+  [self updateUI];
 }
 
 #pragma mark - UITableViewDataSource
   
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return [CoreDataStack sharedInstance].savedReservations.count;
+  if (self.newReservation) {
+    return self.queryHotels.count;
+  } else {
+    return [CoreDataStack sharedInstance].savedReservations.count;
+  }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   ReservationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"ReservationCell" forIndexPath: indexPath];
+  AttributedString *atString = [[AttributedString alloc] init];
   
-  cell.reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
+  if (self.newReservation) {
+    Hotel* hotel = self.queryHotels[indexPath.row];
+
+    [atString assignHeadline: hotel.name withSelector: nil];
+    [atString assignHeadline2: [ViewUtility starRating: hotel.rating] withSelector: nil];
+    [atString assignSubheadline: hotel.city withSelector: nil];
+    [atString assignSubheadline2: hotel.state withSelector: nil];
+    [atString assignBody: [ViewUtility roomCount: hotel.rooms.count] withSelector: nil];
+    [atString assignBody2: [ViewUtility roomType: self.selectedRoomType] withSelector: nil];
+  } else {
+    Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
+    
+    [atString assignHeadline: [ViewUtility nameWithLast: reservation.guest.lastName first: reservation.guest.firstName] withSelector: nil];
+    [atString assignSubheadline: [ViewUtility dateOnly: reservation.arrival] withSelector: nil];
+    [atString assignSubheadline2: [ViewUtility dateOnly: reservation.departure] withSelector: nil];
+    [atString assignBody: reservation.hotel.name withSelector: nil];
+    [atString assignBody2: [ViewUtility roomType: reservation.roomType] withSelector: nil];
+  }
+  cell.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
   return cell;
 }
 
@@ -168,14 +256,49 @@
   self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
 }
 
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+  NSLog(@"Selector: %@", URL.absoluteString);
+  
+  // TODO: change to using real selectors?
+  if ([URL.absoluteString isEqualToString: @"guestTapped"]) {
+    [self guestTapped];
+  }
+  else if ([URL.absoluteString isEqualToString: @"arrivalTapped"]) {
+    [self arrivalTapped];
+  }
+  else if ([URL.absoluteString isEqualToString: @"departureTapped"]) {
+    [self departureTapped];
+  }
+  else if ([URL.absoluteString isEqualToString: @"hotelTapped"]) {
+    [self hotelTapped];
+  }
+  else if ([URL.absoluteString isEqualToString: @"roomTypeTapped"]) {
+    [self roomTypeTapped];
+  }
+  
+  return NO;
+}
+
 #pragma mark - UIPickerViewDataSource
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-  return 1;
+  if (pickerView.tag == RoomPicker) {
+    return 1;
+  } else if (pickerView.tag == GuestPicker) {
+    return 1;
+  }
+  return 0;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-  return [ViewUtility roomTypes].count;
+  if (pickerView.tag == RoomPicker) {
+      return [ViewUtility roomTypes].count;
+  } else if (pickerView.tag == GuestPicker) {
+    return [CoreDataStack sharedInstance].savedGuests.count;
+  }
+  return 0;
 }
 
 #pragma mark - UIPickerViewDelegate
@@ -183,13 +306,22 @@
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
   
   AttributedString *atString = [[AttributedString alloc] init];
-  [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
+  if (pickerView.tag == RoomPicker) {
+    [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
+  } else if (pickerView.tag == GuestPicker) {
+    Guest *guest = [CoreDataStack sharedInstance].savedGuests[row];
+    [atString assignHeadline: [ViewUtility nameWithLast: guest.lastName first: guest.firstName] withSelector: nil];
+  }
   return [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-  NSLog(@"picker selected: %@", [ViewUtility roomTypes][row]);
-  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(row)];
+  if (pickerView.tag == RoomPicker) {
+    self.selectedRoomType = @(row);
+    self.queryHotels = [[CoreDataStack sharedInstance] hotelsAscendingOnKey: @"name" subQueryKey: @"rooms" subQueryWhereKey: @"type" isEqualTo: self.selectedRoomType];
+  } else if (pickerView.tag == GuestPicker) {
+    self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests[row];
+  }
   [self updateUI];
 }
 

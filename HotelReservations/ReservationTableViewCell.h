@@ -11,6 +11,6 @@
 
 @interface ReservationTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) Reservation *reservation;
+@property (strong, nonatomic) UITextView *textView;
 
 @end

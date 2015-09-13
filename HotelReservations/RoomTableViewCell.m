@@ -38,6 +38,7 @@
   if (!_textView) {
     _textView = [[UITextView alloc] init];
     _textView.editable = NO;
+    _textView.selectable = NO;
     _textView.scrollEnabled = NO;
     _textView.backgroundColor = [UIColor apricot];
   }

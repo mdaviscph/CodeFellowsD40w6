@@ -12,5 +12,6 @@
 @interface ReservationListViewController : UIViewController
 
 @property (strong, nonatomic) Reservation *selectedReservation;
+@property (nonatomic, getter=isNewReservation) BOOL newReservation;
 
 @end

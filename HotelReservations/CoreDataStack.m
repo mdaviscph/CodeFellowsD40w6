@@ -68,10 +68,11 @@ NSString *reservationKey = @"Reservation";
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: hotelKey];
+  NSInteger count = [self.moContext countForFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
-  return [self.moContext countForFetchRequest: request error: &fetchError];
+  return count;
 }
 
 - (void) fetchHotels {
@@ -84,14 +85,64 @@ NSString *reservationKey = @"Reservation";
   }
 }
 
+- (void) fetchHotelsAscendingOnKey:(NSString *)key {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: hotelKey];
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
+  request.sortDescriptors = @[sort];
+  self.savedHotels = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+}
+
+- (NSArray *) hotelsAscendingOnKey:(NSString *)key whereKey:(NSString *)whereKey isEqualTo:(id)value {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: hotelKey];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", whereKey, value];
+  request.predicate = predicate;
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
+  request.sortDescriptors = @[sort];
+  NSArray *hotels = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+  return hotels;
+}
+
+- (NSArray *) hotelsAscendingOnKey:(NSString *)key subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value {
+  
+  NSError *fetchError;
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: hotelKey];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SUBQUERY(%K, $x, $x.%K == %@).@count != 0)", subQueryKey, subQueryWhereKey, value];
+//  NSPredicate *predicate = [NSPredicate predicateWithFormat:
+//                            @"(SUBQUERY(stopTimes, $x, (%@ <= $x.departureTime) && ($x.departureTime <= %@)).@count != 0)",
+//                            startDate, endDate];
+//  (SUBQUERY(residents, $x, $x.firstname == "Jane" && $x.lastname == "Doe").@count != 0)
+//GOOD: NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SUBQUERY(rooms, $x, $x.type == 2).@count != 0)"];
+  request.predicate = predicate;
+  
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
+  request.sortDescriptors = @[sort];
+  NSArray *hotels = [self.moContext executeFetchRequest: request error: &fetchError];
+  if (fetchError) {
+    [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
+  }
+  return hotels;
+}
+
+
 - (NSInteger) fetchRoomCount {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
+  NSInteger count = [self.moContext countForFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
-  return [self.moContext countForFetchRequest: request error: &fetchError];
+  return count;
 }
 
 - (void) fetchRooms {
@@ -116,7 +167,7 @@ NSString *reservationKey = @"Reservation";
   }
 }
 
-- (void) fetchRoomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value {
+- (NSArray *) roomsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
@@ -124,20 +175,22 @@ NSString *reservationKey = @"Reservation";
   request.predicate = predicate;
   NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
   request.sortDescriptors = @[sort];
-  self.savedRooms = [self.moContext executeFetchRequest: request error: &fetchError];
+  NSArray *rooms = [self.moContext executeFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
+  return rooms;
 }
 
 - (NSInteger) fetchGuestCount {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: guestKey];
+  NSInteger count = [self.moContext countForFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
-  return [self.moContext countForFetchRequest: request error: &fetchError];
+  return count;
 }
 
 - (void) fetchGuests {
@@ -154,10 +207,11 @@ NSString *reservationKey = @"Reservation";
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: reservationKey];
+  NSInteger count = [self.moContext countForFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
-  return [self.moContext countForFetchRequest: request error: &fetchError];
+  return count;
 }
 
 - (void) fetchReservations {
@@ -182,7 +236,7 @@ NSString *reservationKey = @"Reservation";
   }
 }
 
-- (void) fetchReservationsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value {
+- (NSArray *) reservationsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: reservationKey];
@@ -190,10 +244,11 @@ NSString *reservationKey = @"Reservation";
   request.predicate = predicate;
   NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey: key ascending: YES];
   request.sortDescriptors = @[sort];
-  self.savedReservations = [self.moContext executeFetchRequest: request error: &fetchError];
+  NSArray *reservations = [self.moContext executeFetchRequest: request error: &fetchError];
   if (fetchError) {
     [AlertPopover alert: kErrorCoreDataFetch withNSError: fetchError controller: nil completion: nil];
   }
+  return reservations;
 }
 
 @end

@@ -92,7 +92,7 @@
   [self.tableView registerClass: [RoomTableViewCell class] forCellReuseIdentifier: @"RoomCell"];
   
   [self.pickerView selectRow: 1 inComponent: 0 animated: YES];
-  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(1)];
+  [[CoreDataStack sharedInstance] roomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(1)];
   [self updateUI];
 }
 
@@ -150,7 +150,7 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
   NSLog(@"picker selected: %@", [ViewUtility roomTypes][row]);
-  [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(row)];
+  [[CoreDataStack sharedInstance] roomsAscendingOnKey: @"number" whereKey: @"type" isEqualTo: @(row)];
   [self updateUI];
 }
 

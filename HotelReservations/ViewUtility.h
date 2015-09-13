@@ -16,6 +16,7 @@
 + (NSString *)roomType:(NSNumber *)type;
 + (NSArray *)roomTypes;
 + (NSString *)clean:(BOOL)cleaned;
++ (NSString *)roomCount:(NSUInteger)count;
 
 + (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName;
 

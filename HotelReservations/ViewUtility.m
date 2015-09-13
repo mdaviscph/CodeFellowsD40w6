@@ -41,6 +41,10 @@
   return cleaned ? NSLocalizedString(@"Clean Room", @"housekeeping status of room") : NSLocalizedString(@"Not Cleaned", @"housekeeping status of room");
 }
 
++ (NSString *)roomCount:(NSUInteger)count {
+  return [NSString stringWithFormat: NSLocalizedString(@"%lu rooms of type", @"count of rooms of specific type"), (unsigned long)count];
+}
+
 + (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName {
   return [[lastName stringByAppendingString: @", "] stringByAppendingString: firstName];
 }
