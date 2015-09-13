@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0045428D1BA4819E009A54E0 /* Reservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0045428C1BA4819E009A54E0 /* Reservation.m */; };
-		004542901BA4819E009A54E0 /* Hotel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0045428F1BA4819E009A54E0 /* Hotel.m */; };
-		004542931BA4819E009A54E0 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 004542921BA4819E009A54E0 /* Room.m */; };
-		004542961BA4819F009A54E0 /* Guest.m in Sources */ = {isa = PBXBuildFile; fileRef = 004542951BA4819F009A54E0 /* Guest.m */; };
+		0001E1941BA6260E00669A5A /* Guest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E1931BA6260E00669A5A /* Guest.m */; };
+		0001E1971BA6260F00669A5A /* Reservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E1961BA6260F00669A5A /* Reservation.m */; };
+		0001E19A1BA6260F00669A5A /* Hotel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E1991BA6260F00669A5A /* Hotel.m */; };
+		0001E19D1BA6260F00669A5A /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E19C1BA6260F00669A5A /* Room.m */; };
 		006116491B9F441100B5C54B /* HotelJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116481B9F441100B5C54B /* HotelJSONParse.m */; };
 		0061164C1B9F46A400B5C54B /* RoomJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061164B1B9F46A400B5C54B /* RoomJSONParse.m */; };
 		006116551B9F4C8700B5C54B /* JSONFileImport.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116541B9F4C8700B5C54B /* JSONFileImport.m */; };
@@ -51,14 +51,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0045428B1BA4819E009A54E0 /* Reservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reservation.h; sourceTree = "<group>"; };
-		0045428C1BA4819E009A54E0 /* Reservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reservation.m; sourceTree = "<group>"; };
-		0045428E1BA4819E009A54E0 /* Hotel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotel.h; sourceTree = "<group>"; };
-		0045428F1BA4819E009A54E0 /* Hotel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hotel.m; sourceTree = "<group>"; };
-		004542911BA4819E009A54E0 /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
-		004542921BA4819E009A54E0 /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
-		004542941BA4819F009A54E0 /* Guest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Guest.h; sourceTree = "<group>"; };
-		004542951BA4819F009A54E0 /* Guest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Guest.m; sourceTree = "<group>"; };
+		0001E1921BA6260E00669A5A /* Guest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Guest.h; sourceTree = "<group>"; };
+		0001E1931BA6260E00669A5A /* Guest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Guest.m; sourceTree = "<group>"; };
+		0001E1951BA6260F00669A5A /* Reservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reservation.h; sourceTree = "<group>"; };
+		0001E1961BA6260F00669A5A /* Reservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reservation.m; sourceTree = "<group>"; };
+		0001E1981BA6260F00669A5A /* Hotel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotel.h; sourceTree = "<group>"; };
+		0001E1991BA6260F00669A5A /* Hotel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hotel.m; sourceTree = "<group>"; };
+		0001E19B1BA6260F00669A5A /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
+		0001E19C1BA6260F00669A5A /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		006116471B9F441100B5C54B /* HotelJSONParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotelJSONParse.h; sourceTree = "<group>"; };
 		006116481B9F441100B5C54B /* HotelJSONParse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotelJSONParse.m; sourceTree = "<group>"; };
 		0061164A1B9F46A400B5C54B /* RoomJSONParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomJSONParse.h; sourceTree = "<group>"; };
@@ -134,14 +134,14 @@
 		00166E931B9F40A50037E59F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				004542941BA4819F009A54E0 /* Guest.h */,
-				004542951BA4819F009A54E0 /* Guest.m */,
-				004542911BA4819E009A54E0 /* Room.h */,
-				004542921BA4819E009A54E0 /* Room.m */,
-				0045428E1BA4819E009A54E0 /* Hotel.h */,
-				0045428F1BA4819E009A54E0 /* Hotel.m */,
-				0045428B1BA4819E009A54E0 /* Reservation.h */,
-				0045428C1BA4819E009A54E0 /* Reservation.m */,
+				0001E19B1BA6260F00669A5A /* Room.h */,
+				0001E19C1BA6260F00669A5A /* Room.m */,
+				0001E1981BA6260F00669A5A /* Hotel.h */,
+				0001E1991BA6260F00669A5A /* Hotel.m */,
+				0001E1951BA6260F00669A5A /* Reservation.h */,
+				0001E1961BA6260F00669A5A /* Reservation.m */,
+				0001E1921BA6260E00669A5A /* Guest.h */,
+				0001E1931BA6260E00669A5A /* Guest.m */,
 				0061164A1B9F46A400B5C54B /* RoomJSONParse.h */,
 				0061164B1B9F46A400B5C54B /* RoomJSONParse.m */,
 				00DF3BE81BA3829800742079 /* GuestJSONParse.h */,
@@ -178,6 +178,8 @@
 		006116741B9F665100B5C54B /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				00D2C0351B9E855D00DA5A7A /* AppDelegate.h */,
+				00D2C0361B9E855D00DA5A7A /* AppDelegate.m */,
 				006116701B9F663200B5C54B /* AlertPopover.h */,
 				006116711B9F663200B5C54B /* AlertPopover.m */,
 			);
@@ -230,8 +232,6 @@
 			children = (
 				006116871BA0C62F00B5C54B /* View */,
 				00166E931B9F40A50037E59F /* Model */,
-				00D2C0351B9E855D00DA5A7A /* AppDelegate.h */,
-				00D2C0361B9E855D00DA5A7A /* AppDelegate.m */,
 				006116731B9F664400B5C54B /* Controller */,
 				006116741B9F665100B5C54B /* Other */,
 				00D2C0381B9E855D00DA5A7A /* HotelReservations.xcdatamodeld */,
@@ -372,10 +372,10 @@
 				00DF3BF01BA39FD600742079 /* ReservationTableViewCell.m in Sources */,
 				006116491B9F441100B5C54B /* HotelJSONParse.m in Sources */,
 				0061164C1B9F46A400B5C54B /* RoomJSONParse.m in Sources */,
-				0045428D1BA4819E009A54E0 /* Reservation.m in Sources */,
+				0001E1971BA6260F00669A5A /* Reservation.m in Sources */,
 				006116551B9F4C8700B5C54B /* JSONFileImport.m in Sources */,
 				00D2C0371B9E855D00DA5A7A /* AppDelegate.m in Sources */,
-				004542961BA4819F009A54E0 /* Guest.m in Sources */,
+				0001E1941BA6260E00669A5A /* Guest.m in Sources */,
 				006116A21BA23D5A00B5C54B /* UIColorExtension.m in Sources */,
 				00DF3BED1BA382AF00742079 /* ReservationJSONParse.m in Sources */,
 				0061168D1BA10CBD00B5C54B /* HotelTableViewCell.m in Sources */,
@@ -386,11 +386,11 @@
 				006116721B9F663200B5C54B /* AlertPopover.m in Sources */,
 				0061169C1BA20DDC00B5C54B /* RoomTableViewCell.m in Sources */,
 				00D2C03A1B9E855D00DA5A7A /* HotelReservations.xcdatamodeld in Sources */,
-				004542901BA4819E009A54E0 /* Hotel.m in Sources */,
 				006116771BA0945D00B5C54B /* MenuViewController.m in Sources */,
+				0001E19A1BA6260F00669A5A /* Hotel.m in Sources */,
 				006116901BA1103A00B5C54B /* AttributedString.m in Sources */,
 				006116991BA1EEEF00B5C54B /* UIViewExtension.m in Sources */,
-				004542931BA4819E009A54E0 /* Room.m in Sources */,
+				0001E19D1BA6260F00669A5A /* Room.m in Sources */,
 				00D2C03D1B9E855D00DA5A7A /* HotelListViewController.m in Sources */,
 				0061167D1BA09D2600B5C54B /* RoomListViewController.m in Sources */,
 				00D2C0341B9E855D00DA5A7A /* main.m in Sources */,

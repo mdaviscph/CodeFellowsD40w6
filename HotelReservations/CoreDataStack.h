@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class Reservation;
 
 @interface CoreDataStack : NSObject
 
@@ -17,7 +18,8 @@
 
 + (instancetype)sharedInstance;
 
-- (BOOL) saveAll;
+- (BOOL)saveAll;
+- (void)fetchAll;
 
 - (NSInteger) fetchHotelCount;
 - (void) fetchHotels;
@@ -29,6 +31,7 @@
 - (void) fetchRooms;
 - (void) fetchRoomsAscendingOnKey:(NSString *)key;
 - (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys whereKey:(NSString *)whereKey isEqualTo:(id)value;
+- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys usingReservation:(Reservation *)reservation;
 - (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value;
 
 - (NSInteger) fetchGuestCount;

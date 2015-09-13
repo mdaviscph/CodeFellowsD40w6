@@ -20,7 +20,6 @@
   guest.firstName = jsonDictionary[@"firstName"];
   guest.lastName = jsonDictionary[@"lastName"];
   guest.city = jsonDictionary[@"city"];
-  guest.peopleInParty = @(1);
   guest.state = @"WA";
   
   NSArray *reservationDictionaries = jsonDictionary[@"reservations"];

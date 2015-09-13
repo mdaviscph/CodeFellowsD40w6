@@ -118,6 +118,7 @@ NSString *const menuItemReservations = @"Reservations";
     [JSONFileImport relateGuests: importedGuests toHotels: importedHotels];
     [[CoreDataStack sharedInstance] saveAll];
   }
+  [[CoreDataStack sharedInstance] fetchAll];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -127,6 +128,17 @@ NSString *const menuItemReservations = @"Reservations";
   self.menuItemsVC = nil;
 }
   
+//- (void)nslogHotels:(NSArray *)hotels {
+//  for (Hotel *hotel in hotels) {
+//    for (Room *room in hotel.rooms) {
+//      NSLog(@"Hotel %@ room %@", hotel.name, room.number);
+//    }
+//    for (Reservation *reservation in hotel.reservations) {
+//      NSLog(@"Hotel %@ reservation guest %@ arrival %@ departure %@", hotel.name, reservation.guest.lastName, reservation.arrival, reservation.departure);
+//    }
+//  }
+//}
+
 #pragma mark - UITableViewDataSource
   
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

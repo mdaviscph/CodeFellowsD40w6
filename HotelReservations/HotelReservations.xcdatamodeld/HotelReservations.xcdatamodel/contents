@@ -4,7 +4,6 @@
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" attributeType="String" syncable="YES"/>
         <attribute name="lastName" attributeType="String" syncable="YES"/>
-        <attribute name="peopleInParty" attributeType="Integer 32" minValueString="1" maxValueString="6" defaultValueString="1" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="reservations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reservation" inverseName="guest" inverseEntity="Reservation" syncable="YES"/>
         <relationship name="rooms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Room" inverseName="guest" inverseEntity="Room" syncable="YES"/>
@@ -26,9 +25,9 @@
         <relationship name="hotel" maxCount="1" deletionRule="Nullify" destinationEntity="Hotel" inverseName="reservations" inverseEntity="Hotel" syncable="YES"/>
     </entity>
     <entity name="Room" representedClassName="Room" syncable="YES">
+        <attribute name="bookedIn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="bookedOut" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="clean" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
-        <attribute name="floor" attributeType="Integer 32" minValueString="1" defaultValueString="1" syncable="YES"/>
-        <attribute name="maxOccupancy" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="6" defaultValueString="1" syncable="YES"/>
         <attribute name="number" attributeType="String" minValueString="2" syncable="YES"/>
         <attribute name="rate" optional="YES" attributeType="Decimal" minValueString="0" defaultValueString="0.0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 32" minValueString="0" maxValueString="4" defaultValueString="1" syncable="YES"/>
@@ -36,7 +35,7 @@
         <relationship name="hotel" maxCount="1" deletionRule="Nullify" destinationEntity="Hotel" inverseName="rooms" inverseEntity="Hotel" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Guest" positionX="-443" positionY="-232" width="128" height="148"/>
+        <element name="Guest" positionX="-443" positionY="-232" width="128" height="133"/>
         <element name="Hotel" positionX="-749" positionY="-477" width="128" height="148"/>
         <element name="Reservation" positionX="-738" positionY="-252" width="128" height="118"/>
         <element name="Room" positionX="-441" positionY="-477" width="128" height="163"/>
