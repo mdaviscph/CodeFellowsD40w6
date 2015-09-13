@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const kAssociatedObjectRoomGuestKey;
 extern NSString *const kAssociatedObjectReservationHotelKey;
 
 @interface JSONFileImport : NSObject

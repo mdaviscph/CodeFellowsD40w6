@@ -99,7 +99,15 @@
 #pragma mark - Helper Methods
 
 -(void) updateUI {
-  self.numberLabel.attributedText = [AttributedString stringFromHeadline: @"test" subheadline: nil body: nil footnote: nil caption: nil color: [UIColor darkVenetianRed]];
+
+//  AttributedString *atString = [[AttributedString alloc] init];
+//  [atString assignHeadline: self.room.hotel.name withSelector: nil];
+//  [atString assignHeadline2: self.room.number withSelector: nil];
+//  [atString assignSubheadline: [ViewUtility dollarRating: self.room.type] withSelector: nil];
+//  [atString assignSubheadline2: [ViewUtility roomType: self.room.type] withSelector: nil];
+//  [atString assignCaption: [ViewUtility clean: self.room.clean.boolValue] withSelector: nil];
+//  
+//  self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
   [self.tableView reloadData];
 }
 
@@ -129,7 +137,10 @@
 #pragma mark - UIPickerViewDelegate
 
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return [AttributedString stringFromHeadline: nil subheadline: nil body: nil footnote: nil caption: [ViewUtility roomTypes][row] color: [UIColor darkVenetianRed]];
+
+  AttributedString *atString = [[AttributedString alloc] init];
+  [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
+  return [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 
 //- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {

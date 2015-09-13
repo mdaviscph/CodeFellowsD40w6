@@ -7,8 +7,11 @@
 //
 
 #import "RoomJSONParse.h"
+#import "JSONFileImport.h"
+#import "ViewUtility.h"
 #import "Hotel.h"
 #import "AppDelegate.h"
+#import <objc/runtime.h>
 
 @implementation Room (JSONParse)
 
@@ -20,7 +23,12 @@
   room.number = jsonDictionary[@"number"];
   room.type = jsonDictionary[@"type"];
   room.rate = jsonDictionary[@"rate"];
+  NSString *guestLastName = jsonDictionary[@"guestLastName"];
+  NSString *guestFirstName = jsonDictionary[@"guestFirstName"];
   
+  if (guestLastName && guestFirstName) {
+    objc_setAssociatedObject(room, (__bridge const void *)(kAssociatedObjectRoomGuestKey), [ViewUtility nameWithLast: guestLastName first: guestFirstName], OBJC_ASSOCIATION_COPY);
+  }
   room.hotel = hotel;
   return room;
 }

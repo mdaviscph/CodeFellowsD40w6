@@ -9,11 +9,13 @@
 #import "JSONFileImport.h"
 #import "HotelJSONParse.h"
 #import "GuestJSONParse.h"
+#import "ViewUtility.h"
 #import "Room.h"
 #import "Reservation.h"
 #import "AlertPopover.h"
 #import <objc/runtime.h>
 
+NSString *const kAssociatedObjectRoomGuestKey = @"RoomGuestName";
 NSString *const kAssociatedObjectReservationHotelKey = @"ReservationHotelName";
 
 @implementation JSONFileImport
@@ -57,12 +59,28 @@ NSString *const kAssociatedObjectReservationHotelKey = @"ReservationHotelName";
 }
 
 + (void) relateHotels:(NSArray *)importedHotels toGuests:(NSArray *)importedGuests {
+  for (Hotel *hotel in importedHotels) {
+    for (Room *room in hotel.rooms) {
+      NSString *guestName = objc_getAssociatedObject(room, (__bridge const void *)(kAssociatedObjectRoomGuestKey));
+      if (guestName) {
+        for (Guest *guest in importedGuests) {
+          if ([guestName isEqualToString: [ViewUtility nameWithLast: guest.lastName first: guest.firstName]]) {
+            room.guest = guest;
+          }
+        }
+      }
+      objc_removeAssociatedObjects(room);
+    }
+    //for (Room *room in hotel.rooms) {
+    //  NSLog(@"%@ %@ %@, %@", hotel.name, room.number, room.guest.lastName, room.guest.firstName);
+    //}
+  }
 
 }
 
 + (void) relateGuests:(NSArray *)importedGuests toHotels:(NSArray *)importedHotels {
   for (Guest *guest in importedGuests) {
-    for (Reservation * reservation in guest.reservations) {
+    for (Reservation *reservation in guest.reservations) {
       NSString *hotelName = objc_getAssociatedObject(reservation, (__bridge const void *)(kAssociatedObjectReservationHotelKey));
       if (hotelName) {
         for (Hotel *hotel in importedHotels) {
@@ -73,9 +91,9 @@ NSString *const kAssociatedObjectReservationHotelKey = @"ReservationHotelName";
       }
       objc_removeAssociatedObjects(reservation);
     }
-    for (Reservation * reservation in guest.reservations) {
-      NSLog(@"%@, %@ %@-%@ %@", guest.lastName, guest.firstName, reservation.arrival.description, reservation.arrival.description, reservation.hotel.name);
-    }
+    //for (Reservation *reservation in guest.reservations) {
+    //  NSLog(@"%@, %@ %@-%@ %@", guest.lastName, guest.firstName, reservation.arrival.description, reservation.arrival.description, reservation.hotel.name);
+    //}
   }
 }
 

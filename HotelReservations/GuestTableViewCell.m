@@ -58,8 +58,13 @@
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  NSString *name = [ViewUtility nameWithLast: self.guest.lastName first: self.guest.firstName];
-  self.textView.attributedText = [AttributedString stringFromHeadline: name subheadline: self.guest.city body: self.guest.state footnote: nil caption: nil color: [UIColor vanDykeBrown]];
+  
+  AttributedString *atString = [[AttributedString alloc] init];
+  [atString assignHeadline: [ViewUtility nameWithLast: self.guest.lastName first: self.guest.firstName] withSelector: nil];
+  [atString assignSubheadline: self.guest.city withSelector: nil];
+  [atString assignSubheadline2: self.guest.state withSelector: nil];
+  
+  self.textView.attributedText = [atString hypertextStringWithColor: [UIColor vanDykeBrown]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {

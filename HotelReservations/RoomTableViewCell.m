@@ -59,7 +59,15 @@
 #pragma mark - Helper Methods
 
 - (void) updateUI {
-  self.textView.attributedText = [AttributedString stringFromHeadline: self.room.hotel.name subheadline: self.room.number body: [ViewUtility roomType: self.room.type] footnote: [ViewUtility dollarRating: self.room.type] caption: [ViewUtility clean: self.room.clean.boolValue] color: [UIColor darkVenetianRed]];
+  
+  AttributedString *atString = [[AttributedString alloc] init];
+  [atString assignHeadline: self.room.hotel.name withSelector: nil];
+  [atString assignHeadline2: self.room.number withSelector: nil];
+  [atString assignSubheadline: [ViewUtility dollarRating: self.room.type] withSelector: nil];
+  [atString assignSubheadline2: [ViewUtility roomType: self.room.type] withSelector: nil];
+  [atString assignCaption: [ViewUtility clean: self.room.clean.boolValue] withSelector: nil];
+
+  self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {

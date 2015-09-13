@@ -2,7 +2,7 @@
     "Hotels": [
               {
                 "name" : "Fancy Estates",
-                "location" : "Seattle",
+                "city" : "Seattle",
                 "stars" : 4,
                 "rooms" : [
                             {
@@ -13,7 +13,9 @@
                             {
                                "number" : "402",
                                "type" : 2,
-                               "rate" : 4
+                               "rate" : 4,
+                               "guestLastName" : "Baxter",
+                               "guestFirstName" : "Tony"
                             },
                             {
                                "number" : "403",
@@ -23,7 +25,9 @@
                             {
                                "number" : "404",
                                "type" : 2,
-                               "rate" : 4
+                               "rate" : 4,
+                               "guestLastName" : "Baxter",
+                               "guestFirstName" : "Tony"
                             },
                             {
                                "number" : "405",
@@ -34,13 +38,15 @@
               },
               {
                 "name" : "Solid Stay",
-                "location" : "Fremont",
+                "city" : "Fremont",
                 "stars" : 3,
                 "rooms" : [
                              {
                              "number" : "301",
                              "type" : 2,
-                             "rate" : 3
+                             "rate" : 3,
+                             "guestLastName" : "Taylor",
+                             "guestFirstName" : "Sally"
                              },
                              {
                              "number" : "302",
@@ -60,13 +66,15 @@
                              {
                              "number" : "305",
                              "type" : 4,
-                             "rate" : 3
+                             "rate" : 3,
+                             "guestLastName" : "Jones",
+                             "guestFirstName" : "Mary"
                              }
                           ]
               },
               {
                 "name" : "Decent Inn",
-                "location" : "Pioneer Square",
+                "city" : "Pioneer Square",
                 "stars" : 3,
                 "rooms" : [
                             {
@@ -100,7 +108,7 @@
               },
               {
                 "name" : "Okay Motel",
-                "location" : "Sodo",
+                "city" : "Sodo",
                 "stars" : 1,
                 "rooms" : [
                              {
@@ -116,7 +124,9 @@
                              {
                              "number" : "W103",
                              "type" : 2,
-                             "rate" : 1
+                             "rate" : 1,
+                             "guestLastName" : "Taylor",
+                             "guestFirstName" : "Sally"
                              },
 
                              {

@@ -11,7 +11,17 @@
 
 @interface AttributedString : NSObject
 
-+ (NSAttributedString *)stringFromHeadline:(NSString *)headline subheadline:(NSString *)subheadline body:(NSString *)body footnote:(NSString *)footnote caption:(NSString *)caption color:(UIColor *)color;
+- (void) assignHeadline:(NSString *)headline withSelector:(NSString *)selector;
+- (void) assignSubheadline:(NSString *)subheadline withSelector:(NSString *)selector;
+- (void) assignBody:(NSString *)body withSelector:(NSString *)selector;
+- (void) assignFootnote:(NSString *)footnote withSelector:(NSString *)selector;
+- (void) assignCaption:(NSString *)caption withSelector:(NSString *)selector;
+- (void) assignHeadline2:(NSString *)headline2 withSelector:(NSString *)selector;
+- (void) assignSubheadline2:(NSString *)subheadline2 withSelector:(NSString *)selector;
+- (void) assignBody2:(NSString *)body2 withSelector:(NSString *)selector;
+- (void) assignFootnote2:(NSString *)footnote2 withSelector:(NSString *)selector;
+- (void) assignCaption2:(NSString *)caption2 withSelector:(NSString *)selector;
 
+- (NSAttributedString *)hypertextStringWithColor:(UIColor *)color;
 
 @end

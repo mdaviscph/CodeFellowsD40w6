@@ -61,9 +61,14 @@
 
 - (void) updateUI {
   
-#pragma mark TODO here
-  NSString *name = [ViewUtility nameWithLast: self.reservation.guest.lastName first: self.reservation.guest.firstName];
-  self.textView.attributedText = [AttributedString stringFromHeadline: name subheadline: self.reservation.hotel.name body: [ViewUtility datesWithDurationFromStart: self.reservation.arrival end: self.reservation.departure] footnote: [ViewUtility roomType: @(1)/* TODO: self.reservation.room.type*/] caption: nil color: [UIColor darkVenetianRed]];
+  AttributedString *atString = [[AttributedString alloc] init];
+  [atString assignHeadline: [ViewUtility nameWithLast: self.reservation.guest.lastName first: self.reservation.guest.firstName] withSelector: nil];
+  [atString assignSubheadline: [ViewUtility dateOnly: self.reservation.arrival] withSelector: nil];
+  [atString assignSubheadline2: [ViewUtility dateOnly: self.reservation.departure] withSelector: nil];
+  [atString assignBody: self.reservation.hotel.name withSelector: nil];
+  [atString assignBody2: [ViewUtility roomType: self.reservation.roomType] withSelector: nil];
+  
+  self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {

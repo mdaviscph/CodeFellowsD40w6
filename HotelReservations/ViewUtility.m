@@ -45,8 +45,16 @@
   return [[lastName stringByAppendingString: @", "] stringByAppendingString: firstName];
 }
 
+// TODO: duration
 + (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate {
-  return @"duration...start...end...dates";
+  return [NSString stringWithFormat: @"%@ - %@", [ViewUtility dateOnly: startDate], [ViewUtility dateOnly: startDate]];
+}
+
+// TODO: format for locale
++ (NSString *)dateOnly:(NSDate *)date {
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  dateFormatter.dateFormat = @"MM/dd/yyyy";
+  return [dateFormatter stringFromDate: date];
 }
 
 @end

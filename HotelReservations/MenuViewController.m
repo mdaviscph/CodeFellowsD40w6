@@ -114,6 +114,7 @@ NSString *const menuItemReservations = @"Reservations";
     importedGuests = [JSONFileImport loadSavedGuestsFromJSON];
   }
   if (importedHotels || importedGuests) {
+    [JSONFileImport relateHotels: importedHotels toGuests: importedGuests];
     [JSONFileImport relateGuests: importedGuests toHotels: importedHotels];
     [[CoreDataStack sharedInstance] saveAll];
   }
