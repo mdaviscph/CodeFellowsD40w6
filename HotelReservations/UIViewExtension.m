@@ -20,7 +20,7 @@
   [superView addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[view]|" options: 0  metrics: nil views: viewsInfo]];
 }
 
-- (void) addToSuperViewWithConstraints: (UIView *)superView withViewAbove: (UIView *)topView height: (CGFloat)height topSpacing: (CGFloat)topSpacing bottomSpacing: (CGFloat)bottomSpacing width: (CGFloat)width leadingSpacing: (CGFloat)leadingSpacing trailingSpacing: (CGFloat)trailingSpacing  {
+- (NSArray *) addToSuperViewWithConstraints: (UIView *)superView withViewAbove: (UIView *)topView height: (CGFloat)height topSpacing: (CGFloat)topSpacing bottomSpacing: (CGFloat)bottomSpacing width: (CGFloat)width leadingSpacing: (CGFloat)leadingSpacing trailingSpacing: (CGFloat)trailingSpacing  {
   
   [superView addSubview: self];
   [self setTranslatesAutoresizingMaskIntoConstraints: NO];
@@ -34,6 +34,7 @@
   
   NSDictionary *metricsInfo = @{@"height" : @(height), @"topSpacing" : @(topSpacing), @"bottomSpacing" : @(bottomSpacing), @"width" : @(width), @"leadingSpacing" : @(leadingSpacing), @"trainlingSpacing" : @(trailingSpacing)};
 
+  NSArray* constraints;  // TODO: better method of providing single constraint to use to move tableView
   if (topSpacing != 0 && bottomSpacing != 0) {
     if (topView) {
       [superView addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"V:[topView]-topSpacing-[view]-bottomSpacing-|" options: 0  metrics: metricsInfo views: viewsInfo]];
@@ -50,7 +51,8 @@
     [superView addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"V:[view]-bottomSpacing-|" options: 0  metrics: metricsInfo views: viewsInfo]];
   } else if (height != 0) {
     if (topView) {
-      [superView addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"V:[topView][view]" options: 0  metrics: metricsInfo views: viewsInfo]];
+      constraints = [NSLayoutConstraint constraintsWithVisualFormat: @"V:[topView][view]" options: 0  metrics: metricsInfo views: viewsInfo];
+      [superView addConstraints:  constraints];
     } else {
       [superView addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[view]" options: 0  metrics: metricsInfo views: viewsInfo]];
     }
@@ -80,6 +82,7 @@
   if (width != 0) {
     [self addConstraints:  [NSLayoutConstraint constraintsWithVisualFormat: @"H:[view(width)]" options: 0 metrics: metricsInfo views: viewsInfo]];
   }
+  return constraints;
 }
 
 - (void) addToSuperViewWithConstraintsAndIntrinsicHeight: (UIView *)superView withViewAbove: (UIView *)topView topSpacing: (CGFloat)topSpacing bottomSpacing: (CGFloat)bottomSpacing width: (CGFloat)width leadingSpacing: (CGFloat)leadingSpacing trailingSpacing: (CGFloat)trailingSpacing {

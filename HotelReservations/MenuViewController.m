@@ -40,7 +40,9 @@ NSString *const menuItemReservations = @"Reservations";
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] init];
+    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
+    _tableView.allowsSelection = YES;
+    _tableView.backgroundColor = [UIColor vividTangerine];
   }
   return _tableView;
 }
@@ -100,6 +102,9 @@ NSString *const menuItemReservations = @"Reservations";
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  self.edgesForExtendedLayout = UIRectEdgeNone;
+  self.navigationItem.title = @"Hotel Reservations";
   
   self.tableView.dataSource = self;
   self.tableView.delegate = self;
@@ -126,6 +131,15 @@ NSString *const menuItemReservations = @"Reservations";
   
   // TODO - figure out how to release VCs
   self.menuItemsVC = nil;
+  self.hotelVC = nil;
+  self.roomVC = nil;
+  self.guestVC = nil;
+  self.reservationVC = nil;
+}
+
+- (void)viewDidLayoutSubviews {
+  [super viewDidLayoutSubviews];
+  self.tableView.rowHeight = self.tableView.bounds.size.height / 4;
 }
   
 //- (void)nslogHotels:(NSArray *)hotels {
@@ -147,6 +161,13 @@ NSString *const menuItemReservations = @"Reservations";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"MenuCell" forIndexPath: indexPath];
+
+  UIColor *cellColor = (indexPath.row % 2 == 0) ? [UIColor gold] : [UIColor lightGold];
+  cell.backgroundColor = cellColor;
+  cell.textLabel.backgroundColor = cellColor;
+  cell.textLabel.textColor = [UIColor brownColor];
+  cell.textLabel.font = [UIFont systemFontOfSize: 24 weight: 0.1];
+  cell.selectionStyle = UITableViewCellSelectionStyleNone;
   cell.textLabel.text = self.menuItems[indexPath.row];
   
   return cell;

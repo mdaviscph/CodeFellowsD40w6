@@ -27,6 +27,8 @@ static const NSInteger kDefaultRoomType = 1;
 @property (strong, nonatomic) UIPickerView *roomTypeOrGuestPickerView;
 @property (strong, nonatomic) UIDatePicker *datePickerView;
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIView* tableViewSpacer;
+@property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
 
 @property (strong, nonatomic) NSArray *queryRooms;
 @property (nonatomic) NSInteger selectedGuest;
@@ -89,30 +91,17 @@ static const NSInteger kDefaultRoomType = 1;
 - (void)loadView {
   NSLog(@"loading list view for Reservations");
 
-  self.edgesForExtendedLayout = UIRectEdgeNone;
-  
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor venetianRed];
   
-  UIView* spacer1 = [[UIView alloc] init];
-  spacer1.backgroundColor = [UIColor middleRed];
-  UIView* spacer2 = [[UIView alloc] init];
-  spacer2.backgroundColor = [UIColor middleRed];
-
-  [spacer1 addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: spacer1 height: 80 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [spacer2 addToSuperViewWithConstraints: rootView withViewAbove: self.selectionView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: spacer2 height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-
-  [self.roomTypeOrGuestPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.datePickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-
+  [self createConstraintsAndViewsForSuperView: rootView];
   self.view = rootView;
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  self.edgesForExtendedLayout = UIRectEdgeNone;
   
   self.navigationItem.title = @"Reservations";
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
@@ -129,32 +118,76 @@ static const NSInteger kDefaultRoomType = 1;
   
   self.roomTypeOrGuestPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
+  self.selectionView.hidden = YES;
+  [self.view setNeedsDisplay];
   
   if ([[CoreDataStack sharedInstance] fetchReservationCount] > 0) {
     [[CoreDataStack sharedInstance] fetchReservations];
-    self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[0];
+    self.selectedReservation = [CoreDataStack sharedInstance].savedReservations.firstObject;
   }
   [self updateUI];
 }
 
 #pragma mark - Helper Methods
 
-- (void) updateUI {
+- (void) createConstraintsAndViewsForSuperView:(UIView *)rootView {
 
+  UIView* topSpacerView = [[UIView alloc] init];
+  topSpacerView.backgroundColor = [UIColor middleRed];
+  self.tableViewSpacer = [[UIView alloc] init];
+  self.tableViewSpacer.backgroundColor = [UIColor middleRed];
+  
+  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 80 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  
+  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.roomTypeOrGuestPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.datePickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  
+  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.tableViewSpacer height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+}
+
+- (void) adjustTableViewSpacingUsingContraints {
+  
+  [self.view removeConstraints: self.tableViewSpacerConstraints];
+  if (self.newReservation) {
+    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.selectionView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  } else {
+    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  }
+  [self.view layoutIfNeeded];
+}
+
+- (void) updateUI {
+  [self updateTextView];
+  [self updateSelectionView];
+  [self updateTableView];
+}
+- (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
   [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withSelector: @"guestTapped"];
   [atString assignSubheadline: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
   [atString assignSubheadline2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
-  [atString assignBody: self.selectedReservation.hotel.name withSelector: @"hotelTapped"];
+  [atString assignBody: self.selectedReservation.hotel.name withSelector: nil];
   [atString assignBody2: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: @"roomTypeTapped"];
   
   self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
-
-  [self.roomTypeOrGuestPickerView reloadAllComponents];
+}
+- (void) updateSelectionView {
+  switch (self.nowSelecting) {
+    case SelectingGuest:
+    case SelectingRoomType:
+      [self.roomTypeOrGuestPickerView reloadAllComponents];
+      break;
+    default:
+      break;
+  }
+}
+- (void) updateTableView {
   [self.tableView reloadData];
 }
-
-- (void) queryForRooms {
+- (void) queryForAvailableRooms {
   self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] usingReservation: self.selectedReservation];
   [self updateUI];
 }
@@ -163,6 +196,7 @@ static const NSInteger kDefaultRoomType = 1;
 
 - (void)addButtonTapped {
   self.newReservation = YES;
+  [self adjustTableViewSpacingUsingContraints];
   self.textView.selectable = YES;
   
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
@@ -175,22 +209,38 @@ static const NSInteger kDefaultRoomType = 1;
   
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
-  [self queryForRooms];
+  [self queryForAvailableRooms];
+  
+  self.selectionView.hidden = NO;
   [self guestTapped];
 }
 - (void)saveButtonTapped {
   self.newReservation = NO;
-  self.textView.selectable = YES;
+  [self adjustTableViewSpacingUsingContraints];
+  [self.view layoutIfNeeded];
+  
+  self.textView.selectable = NO;
+
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
-  [[CoreDataStack sharedInstance] saveAll];
-  self.selectedReservation = nil;
+
+  if (self.selectedReservation.hotel && self.selectedReservation.guest) {
+    // TODO: figure out the way to only save this reservation.
+    [[CoreDataStack sharedInstance] saveAll];
+  }
+
+  self.roomTypeOrGuestPickerView.hidden = YES;
+  self.datePickerView.hidden = YES;
+  self.selectionView.hidden = YES;
+
+  [[CoreDataStack sharedInstance] fetchReservations];
+  self.selectedReservation = [CoreDataStack sharedInstance].savedReservations.lastObject;
+  [self updateUI];
 }
 
 - (void)guestTapped {
   self.nowSelecting = SelectingGuest;
   self.roomTypeOrGuestPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.roomTypeOrGuestPickerView.superview setNeedsDisplay];
   [self.roomTypeOrGuestPickerView selectRow: self.selectedGuest inComponent: 0 animated: YES];
   [self updateUI];
 }
@@ -208,17 +258,12 @@ static const NSInteger kDefaultRoomType = 1;
   self.datePickerView.date = self.selectedReservation.departure;
   [self updateUI];
 }
-- (void)hotelTapped {
-  self.nowSelecting = SelectingHotel;
-  self.roomTypeOrGuestPickerView.hidden = YES;
-//  [self.roomTypePickerView selectRow: 1 inComponent: 0 animated: YES];
-  [self updateUI];
-}
+//- (void)hotelTapped {
+//}
 - (void)roomTypeTapped {
   self.nowSelecting = SelectingRoomType;
   self.roomTypeOrGuestPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.roomTypeOrGuestPickerView.superview setNeedsDisplay];
   [self.roomTypeOrGuestPickerView selectRow: self.selectedReservation.roomType.integerValue inComponent: 0 animated: YES];
   [self updateUI];
 }
@@ -228,11 +273,11 @@ static const NSInteger kDefaultRoomType = 1;
   switch (self.nowSelecting) {
     case SelectingArrival:
       self.selectedReservation.arrival = sender.date;
-      [self queryForRooms];
+      [self queryForAvailableRooms];
       break;
     case SelectingDeparture:
       self.selectedReservation.departure = sender.date;
-      [self queryForRooms];
+      [self queryForAvailableRooms];
       break;
     default:
       break;
@@ -277,11 +322,14 @@ static const NSInteger kDefaultRoomType = 1;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   if (self.newReservation) {
-    
+    self.selectedReservation.hotel = [self.queryRooms[indexPath.row] hotel];
+    [tableView deselectRowAtIndexPath: indexPath animated: NO];
   } else {
     self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
-    [self updateUI];
+    [tableView deselectRowAtIndexPath: indexPath animated: NO];
+    NSLog(@"selected row %lu %@", indexPath.row, self.selectedReservation.guest.lastName);
   }
+  [self updateTextView];
 }
 
 #pragma mark - UITextViewDelegate
@@ -297,9 +345,9 @@ static const NSInteger kDefaultRoomType = 1;
   else if ([URL.absoluteString isEqualToString: @"departureTapped"]) {
     [self departureTapped];
   }
-  else if ([URL.absoluteString isEqualToString: @"hotelTapped"]) {
-    [self hotelTapped];
-  }
+//  else if ([URL.absoluteString isEqualToString: @"hotelTapped"]) {
+//    [self hotelTapped];
+//  }
   else if ([URL.absoluteString isEqualToString: @"roomTypeTapped"]) {
     [self roomTypeTapped];
   }
@@ -312,8 +360,6 @@ static const NSInteger kDefaultRoomType = 1;
   NSInteger count;
   switch (self.nowSelecting) {
     case SelectingGuest:
-      count = 1;
-      break;
     case SelectingRoomType:
       count = 1;
       break;
@@ -346,10 +392,7 @@ static const NSInteger kDefaultRoomType = 1;
   AttributedString *atString = [[AttributedString alloc] init];
   switch (self.nowSelecting) {
     case SelectingGuest:
-    {
-      Guest *guest = [CoreDataStack sharedInstance].savedGuests[row];
-      [atString assignHeadline: [ViewUtility nameWithLast: guest.lastName first: guest.firstName] withSelector: nil];
-    }
+      [atString assignHeadline: [ViewUtility nameWithLast: [[CoreDataStack sharedInstance].savedGuests[row] lastName] first: [[CoreDataStack sharedInstance].savedGuests[row] firstName]] withSelector: nil];
       break;
     case SelectingRoomType:
       [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
@@ -369,7 +412,7 @@ static const NSInteger kDefaultRoomType = 1;
       break;
     case SelectingRoomType:
       self.selectedReservation.roomType = @(row);
-      [self queryForRooms];
+      [self queryForAvailableRooms];
       break;
     default:
       break;

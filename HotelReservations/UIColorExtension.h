@@ -26,6 +26,7 @@
 + (UIColor *)tumbleweed;
 + (UIColor *)desertSand;
 + (UIColor *)gold;
++ (UIColor *)lightGold;
 + (UIColor *)almond;
   
 @end

@@ -55,6 +55,9 @@
 + (UIColor *)gold {
   return [UIColor colorWithRed255: 230 green255: 190 blue255: 138];
 }
++ (UIColor *)lightGold {
+  return [UIColor colorWithRed255: 236 green255: 203 blue255: 142];
+}
 + (UIColor *)almond {
   return [UIColor colorWithRed255: 238 green255: 217 blue255: 196];
 }
