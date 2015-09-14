@@ -24,4 +24,7 @@
 + (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate;
 + (NSString *)dateOnly:(NSDate *)date;
 
++ (NSString *)hotelPlaceholder;
++ (NSString *)guestPlaceholder;
+
 @end

@@ -22,6 +22,9 @@
 @property (strong, nonatomic) NSString *footnote2;
 @property (strong, nonatomic) NSString *caption2;
 
+@property (strong, nonatomic) NSString *headlinePlacehoder;
+@property (strong, nonatomic) NSString *subheadlinePlacehoder;
+
 @property (strong, nonatomic) NSString *headlineSelector;
 @property (strong, nonatomic) NSString *subheadlineSelector;
 @property (strong, nonatomic) NSString *bodySelector;
@@ -37,12 +40,14 @@
 
 @implementation AttributedString
 
-- (void) assignHeadline:(NSString *)headline withSelector:(NSString *)selector {
+- (void) assignHeadline:(NSString *)headline withPlaceholder:(NSString *)placehoder withSelector:(NSString *)selector {
   self.headline = headline;
+  self.headlinePlacehoder = placehoder;
   self.headlineSelector = selector;
 }
-- (void) assignSubheadline:(NSString *)subheadline withSelector:(NSString *)selector {
+- (void) assignSubheadline:(NSString *)subheadline withPlaceholder:(NSString *)placehoder withSelector:(NSString *)selector {
   self.subheadline = subheadline;
+  self.subheadlinePlacehoder = placehoder;
   self.subheadlineSelector = selector;
 }
 - (void) assignBody:(NSString *)body withSelector:(NSString *)selector {
@@ -80,13 +85,25 @@
 
 - (NSAttributedString *)hypertextStringWithColor:(UIColor *)color {
   
-  UIFont *headlineFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleHeadline];
-  UIFont *subheadlineFont = [UIFont preferredFontForTextStyle: UIFontTextStyleSubheadline];
+  BOOL useHeadlinePlaceholder = !self.headline && !self.headline2 && self.headlinePlacehoder;
+  BOOL useSubheadlinePlaceholder = !self.subheadline && !self.subheadline2 && self.subheadlinePlacehoder;
+  
+  UIFontDescriptorSymbolicTraits headlineTraits = useHeadlinePlaceholder ? UIFontDescriptorTraitItalic : 0;
+  UIFontDescriptorSymbolicTraits subheadlineTraits = useSubheadlinePlaceholder ? UIFontDescriptorTraitItalic : 0;
+  
+  UIFontDescriptor *headlineDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle: UIFontTextStyleHeadline];
+  headlineDescriptor = [headlineDescriptor fontDescriptorWithSymbolicTraits: headlineTraits];
+  UIFont *headlineFont = [UIFont fontWithDescriptor: headlineDescriptor size: 0]; // 0 retains the font size
+
+  UIFontDescriptor *subheadlineDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle: UIFontTextStyleSubheadline];
+  subheadlineDescriptor = [subheadlineDescriptor fontDescriptorWithSymbolicTraits: subheadlineTraits];
+  UIFont *subheadlineFont = [UIFont fontWithDescriptor: subheadlineDescriptor size: 0]; // 0 retains the font size
+
   UIFont *bodyFont        = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
   UIFont *footnoteFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
   UIFont *captionFont     = [UIFont preferredFontForTextStyle: UIFontTextStyleCaption2];
   
-  UIColor *textColor = color ? color : [UIColor blueColor];
+  UIColor *textColor = color ? color : [UIColor blackColor];
   
   NSDictionary *headlineAttributes     = self.headlineSelector ? @{NSFontAttributeName : headlineFont, NSLinkAttributeName : self.headlineSelector, NSForegroundColorAttributeName : textColor} :
   @{NSFontAttributeName : headlineFont, NSForegroundColorAttributeName : textColor};
@@ -115,8 +132,11 @@
   NSString *footnoteSeparator    = self.footnote2    ? @"  " : @"\n";
   NSString *captionSeparator     = self.caption2     ? @"  " : @"\n";
   
-  NSString *headline     = self.headline     ? [self.headline stringByAppendingString: headlineSeparator] : @"";
-  NSString *subheadline  = self.subheadline  ? [self.subheadline stringByAppendingString: subheadlineSeparator] : @"";
+  NSString *headlinePlaceholder = useHeadlinePlaceholder ? [self.headlinePlacehoder stringByAppendingString: @"\n"] : @"";
+  NSString *subheadlinePlaceholder = useSubheadlinePlaceholder ? [self.subheadlinePlacehoder stringByAppendingString: @"\n"] : @"";
+  
+  NSString *headline     = self.headline     ? [self.headline stringByAppendingString: headlineSeparator] : headlinePlaceholder;
+  NSString *subheadline  = self.subheadline  ? [self.subheadline stringByAppendingString: subheadlineSeparator] : subheadlinePlaceholder;
   NSString *body         = self.body         ? [self.body stringByAppendingString: bodySeparator] : @"";
   NSString *footnote     = self.footnote     ? [self.footnote stringByAppendingString: footnoteSeparator] : @"";
   NSString *caption      = self.caption      ? [self.caption stringByAppendingString: captionSeparator] : @"";

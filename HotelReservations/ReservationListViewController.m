@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = 1;
+static const NSInteger kDefaultRoomType = 0;
 
 @interface ReservationListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -116,6 +116,8 @@ static const NSInteger kDefaultRoomType = 1;
   self.tableView.dataSource = self;
   self.tableView.delegate = self;
   [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
+
+  [self.textView setLinkTextAttributes: @{NSForegroundColorAttributeName : [UIColor darkVenetianRed]}];
   
   self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
@@ -167,8 +169,10 @@ static const NSInteger kDefaultRoomType = 1;
 }
 - (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
-  [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withSelector: @"guestTapped"];
-  [atString assignSubheadline: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
+  NSString *guestPlaceholder = self.isNewReservation ? [ViewUtility guestPlaceholder] : nil;
+
+  [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
+  [atString assignSubheadline: [ViewUtility dateOnly: self.selectedReservation.arrival] withPlaceholder: nil withSelector: @"arrivalTapped"];
   [atString assignSubheadline2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
   [atString assignBody: self.selectedReservation.hotel.name withSelector: nil];
   [atString assignBody2: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: @"roomTypeTapped"];
@@ -302,14 +306,14 @@ static const NSInteger kDefaultRoomType = 1;
   if (self.isNewReservation) {
     Room* room = self.queryRooms[indexPath.row];
 
-    [atString assignHeadline: [ViewUtility roomNumber: room.number] withSelector: nil];
+    [atString assignHeadline: [ViewUtility roomNumber: room.number] withPlaceholder: nil withSelector: nil];
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignCaption: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: nil];
   } else {
     Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
     
-    [atString assignHeadline: [ViewUtility nameWithLast: reservation.guest.lastName first: reservation.guest.firstName] withSelector: nil];
-    [atString assignSubheadline: [ViewUtility dateOnly: reservation.arrival] withSelector: nil];
+    [atString assignHeadline: [ViewUtility nameWithLast: reservation.guest.lastName first: reservation.guest.firstName] withPlaceholder: nil withSelector: nil];
+    [atString assignSubheadline: [ViewUtility dateOnly: reservation.arrival] withPlaceholder: nil withSelector: nil];
     [atString assignSubheadline2: [ViewUtility dateOnly: reservation.departure] withSelector: nil];
     [atString assignBody: reservation.hotel.name withSelector: nil];
     [atString assignBody2: [ViewUtility roomType: reservation.roomType] withSelector: nil];
@@ -393,10 +397,10 @@ static const NSInteger kDefaultRoomType = 1;
   AttributedString *atString = [[AttributedString alloc] init];
   switch (self.nowSelecting) {
     case SelectingGuest:
-      [atString assignHeadline: [ViewUtility nameWithLast: [[CoreDataStack sharedInstance].savedGuests[row] lastName] first: [[CoreDataStack sharedInstance].savedGuests[row] firstName]] withSelector: nil];
+      [atString assignHeadline: [ViewUtility nameWithLast: [[CoreDataStack sharedInstance].savedGuests[row] lastName] first: [[CoreDataStack sharedInstance].savedGuests[row] firstName]] withPlaceholder: nil withSelector: nil];
       break;
     case SelectingRoomType:
-      [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
+      [atString assignHeadline: [ViewUtility roomTypes][row] withPlaceholder: nil withSelector: nil];
       break;
     default:
       break;

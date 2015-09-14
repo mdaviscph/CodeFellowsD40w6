@@ -105,6 +105,8 @@ NSString *const menuItemReservations = @"Reservations";
 
   self.edgesForExtendedLayout = UIRectEdgeNone;
   self.navigationItem.title = @"Hotel Reservations";
+  self.navigationController.navigationBar.barTintColor = [UIColor almond];
+  self.navigationController.navigationBar.translucent = NO;
   
   self.tableView.dataSource = self;
   self.tableView.delegate = self;

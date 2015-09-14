@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = 1;
+static const NSInteger kDefaultRoomType = 0;
 
 @interface RoomListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -116,6 +116,8 @@ static const NSInteger kDefaultRoomType = 1;
   self.tableView.delegate = self;
   [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
   
+  [self.textView setLinkTextAttributes: @{NSForegroundColorAttributeName : [UIColor darkVenetianRed]}];
+
   self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
   self.selectionView.hidden = YES;
@@ -166,9 +168,12 @@ static const NSInteger kDefaultRoomType = 1;
 }
 - (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
-  [atString assignHeadline: self.selectedRoom.hotel.name withSelector: @"hotelTapped"];
+  NSString *hotelPlaceholder = self.isNewBooking ? [ViewUtility hotelPlaceholder] : nil;
+  NSString *guestPlaceholder = self.isNewBooking ? [ViewUtility guestPlaceholder] : nil;
+
+  [atString assignHeadline: self.selectedRoom.hotel.name withPlaceholder: hotelPlaceholder withSelector: @"hotelTapped"];
   [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
-  [atString assignSubheadline: [ViewUtility nameWithLast: self.selectedRoom.guest.lastName first: self.selectedRoom.guest.firstName] withSelector: @"guestTapped"];
+  [atString assignSubheadline: [ViewUtility nameWithLast: self.selectedRoom.guest.lastName first: self.selectedRoom.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
   [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withSelector: @"roomTypeTapped"];
   [atString assignFootnote: [ViewUtility dateOnly: self.selectedRoom.bookedIn] withSelector: @"arrivalTapped"];
   [atString assignFootnote2: [ViewUtility dateOnly: self.selectedRoom.bookedOut] withSelector: @"departureTapped"];
@@ -179,6 +184,7 @@ static const NSInteger kDefaultRoomType = 1;
   switch (self.nowSelecting) {
     case SelectingGuest:
     case SelectingRoomType:
+    case SelectingHotel:
       [self.entityPickerView reloadAllComponents];
       break;
     default:
@@ -308,14 +314,14 @@ static const NSInteger kDefaultRoomType = 1;
   if (self.isNewBooking) {
     Room* room = self.queryRooms[indexPath.row];
     
-    [atString assignHeadline: [ViewUtility roomNumber: room.number] withSelector: nil];
+    [atString assignHeadline: [ViewUtility roomNumber: room.number] withPlaceholder: nil withSelector: nil];
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignFootnote: [ViewUtility roomType: self.selectedRoom.type] withSelector: nil];
     [atString assignCaption: [ViewUtility clean: room.clean] withSelector: nil];
   } else {
     Room* room = [CoreDataStack sharedInstance].savedRooms[indexPath.row];
     
-    [atString assignHeadline: [ViewUtility roomNumber: room.number] withSelector: nil];
+    [atString assignHeadline: [ViewUtility roomNumber: room.number] withPlaceholder: nil withSelector: nil];
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignBody: [ViewUtility dollarRating: room.rate] withSelector: nil];
     [atString assignBody2: [ViewUtility roomType: self.selectedRoom.type] withSelector: nil];
@@ -402,13 +408,13 @@ static const NSInteger kDefaultRoomType = 1;
   AttributedString *atString = [[AttributedString alloc] init];
   switch (self.nowSelecting) {
     case SelectingGuest:
-      [atString assignHeadline: [ViewUtility nameWithLast: [[CoreDataStack sharedInstance].savedGuests[row] lastName] first: [[CoreDataStack sharedInstance].savedGuests[row] firstName]] withSelector: nil];
+      [atString assignHeadline: [ViewUtility nameWithLast: [[CoreDataStack sharedInstance].savedGuests[row] lastName] first: [[CoreDataStack sharedInstance].savedGuests[row] firstName]] withPlaceholder: nil withSelector: nil];
       break;
     case SelectingRoomType:
-      [atString assignHeadline: [ViewUtility roomTypes][row] withSelector: nil];
+      [atString assignHeadline: [ViewUtility roomTypes][row] withPlaceholder: nil withSelector: nil];
       break;
     case SelectingHotel:
-      [atString assignHeadline: [[CoreDataStack sharedInstance].savedHotels[row] name] withSelector: nil];
+      [atString assignHeadline: [[CoreDataStack sharedInstance].savedHotels[row] name] withPlaceholder: nil withSelector: nil];
       break;
     default:
       break;

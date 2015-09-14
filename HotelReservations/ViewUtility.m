@@ -34,7 +34,7 @@
 }
 
 + (NSArray *)roomTypes {
-  return @[NSLocalizedString(@"Single Room, Queen Bed", @"room type description"), NSLocalizedString(@"Double Room, Two Twin Beds", @"room type description"), NSLocalizedString(@"One-Room Suite, King Bed", @"room type description"), NSLocalizedString(@"Two-Room Suite, King Beds", @"room type description")];
+  return @[NSLocalizedString(@"Single Room, Queen Bed", @"room type description"), NSLocalizedString(@"Single Room, Two Queen Beds", @"room type description"), NSLocalizedString(@"One-Room Suite, King Bed", @"room type description"), NSLocalizedString(@"Two-Room Suite, King Beds", @"room type description")];
 }
 
 + (NSString *)clean:(BOOL)cleaned {
@@ -63,5 +63,12 @@
   NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
   dateFormatter.dateFormat = @"MM/dd/yyyy";
   return [dateFormatter stringFromDate: date];
+}
+
++ (NSString *)hotelPlaceholder {
+  return NSLocalizedString(@"select a hotel...", @"used as placeholder text");
+}
++ (NSString *)guestPlaceholder {
+  return NSLocalizedString(@"select a guest...", @"used as placeholder text");
 }
 @end
