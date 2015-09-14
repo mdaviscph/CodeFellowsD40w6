@@ -7,7 +7,7 @@
 //
 
 #import "HotelListViewController.h"
-#import "HotelTableViewCell.h"
+#import "TableViewCell.h"
 #import "UIViewExtension.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
@@ -64,7 +64,7 @@
   [super viewDidLoad];
 
   self.tableView.dataSource = self;
-  [self.tableView registerClass: [HotelTableViewCell class] forCellReuseIdentifier: @"HotelCell"];
+  [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
 
   [[CoreDataStack sharedInstance] fetchHotels];
   [self updateUI];
@@ -83,9 +83,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  HotelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"HotelCell" forIndexPath: indexPath];
+  TableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"TableCell" forIndexPath: indexPath];
 
-  cell.hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
+  //cell.hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
   return cell;
 }
 

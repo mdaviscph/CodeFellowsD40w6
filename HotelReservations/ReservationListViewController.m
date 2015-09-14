@@ -7,7 +7,7 @@
 //
 
 #import "ReservationListViewController.h"
-#import "ReservationTableViewCell.h"
+#import "TableViewCell.h"
 #import "UIViewExtension.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
@@ -24,14 +24,14 @@ static const NSInteger kDefaultRoomType = 1;
 
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIView *selectionView;
-@property (strong, nonatomic) UIPickerView *roomTypeOrGuestPickerView;
+@property (strong, nonatomic) UIPickerView *entityPickerView;
 @property (strong, nonatomic) UIDatePicker *datePickerView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView* tableViewSpacer;
 @property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
 
 @property (strong, nonatomic) NSArray *queryRooms;
-@property (nonatomic) NSInteger selectedGuest;
+@property (nonatomic) NSInteger selectedGuest;      // TODO: better way to keep track or index of selected guest since we are sharing PickerView
 
 @end
 
@@ -58,18 +58,19 @@ static const NSInteger kDefaultRoomType = 1;
   return _selectionView;
 }
 
-- (UIPickerView *)roomTypeOrGuestPickerView {
-  if (!_roomTypeOrGuestPickerView) {
-    _roomTypeOrGuestPickerView = [[UIPickerView alloc] init];
-    _roomTypeOrGuestPickerView.backgroundColor = [UIColor peach];
+- (UIPickerView *)entityPickerView {
+  if (!_entityPickerView) {
+    _entityPickerView = [[UIPickerView alloc] init];
+    _entityPickerView.backgroundColor = [UIColor peach];
   }
-  return _roomTypeOrGuestPickerView;
+  return _entityPickerView;
 }
 
 - (UIDatePicker *)datePickerView {
   if (!_datePickerView) {
     _datePickerView = [[UIDatePicker alloc] init];
     _datePickerView.datePickerMode = UIDatePickerModeDate;
+    _datePickerView.minimumDate = [NSDate date];
     _datePickerView.backgroundColor = [UIColor peach];
   }
   return _datePickerView;
@@ -108,21 +109,21 @@ static const NSInteger kDefaultRoomType = 1;
 
   self.textView.delegate = self;
   
-  self.roomTypeOrGuestPickerView.dataSource = self;
-  self.roomTypeOrGuestPickerView.delegate = self;
+  self.entityPickerView.dataSource = self;
+  self.entityPickerView.delegate = self;
   [self.datePickerView addTarget: self action: @selector(dateChanged:) forControlEvents: UIControlEventValueChanged];
   
   self.tableView.dataSource = self;
   self.tableView.delegate = self;
-  [self.tableView registerClass: [ReservationTableViewCell class] forCellReuseIdentifier: @"ReservationCell"];
+  [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
   
-  self.roomTypeOrGuestPickerView.hidden = YES;
+  self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
   self.selectionView.hidden = YES;
   [self.view setNeedsDisplay];
   
   if ([[CoreDataStack sharedInstance] fetchReservationCount] > 0) {
-    [[CoreDataStack sharedInstance] fetchReservations];
+    [[CoreDataStack sharedInstance] fetchReservationsAscendingOnKeys: @[@"arrival"]];
     self.selectedReservation = [CoreDataStack sharedInstance].savedReservations.firstObject;
   }
   [self updateUI];
@@ -138,10 +139,10 @@ static const NSInteger kDefaultRoomType = 1;
   self.tableViewSpacer.backgroundColor = [UIColor middleRed];
   
   [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 80 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 85 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
   [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.roomTypeOrGuestPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.entityPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.datePickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
   self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
@@ -151,7 +152,7 @@ static const NSInteger kDefaultRoomType = 1;
 - (void) adjustTableViewSpacingUsingContraints {
   
   [self.view removeConstraints: self.tableViewSpacerConstraints];
-  if (self.newReservation) {
+  if (self.isNewReservation) {
     self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.selectionView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   } else {
     self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
@@ -178,7 +179,7 @@ static const NSInteger kDefaultRoomType = 1;
   switch (self.nowSelecting) {
     case SelectingGuest:
     case SelectingRoomType:
-      [self.roomTypeOrGuestPickerView reloadAllComponents];
+      [self.entityPickerView reloadAllComponents];
       break;
     default:
       break;
@@ -202,7 +203,6 @@ static const NSInteger kDefaultRoomType = 1;
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
   self.selectedReservation = [NSEntityDescription insertNewObjectForEntityForName: @"Reservation" inManagedObjectContext: context];
   
-  //self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests.firstObject;
   self.selectedReservation.roomType = @(kDefaultRoomType);
   self.selectedReservation.arrival = [NSDate date];
   self.selectedReservation.departure = [NSDate date];
@@ -228,7 +228,7 @@ static const NSInteger kDefaultRoomType = 1;
     [[CoreDataStack sharedInstance] saveAll];
   }
 
-  self.roomTypeOrGuestPickerView.hidden = YES;
+  self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
   self.selectionView.hidden = YES;
 
@@ -239,22 +239,22 @@ static const NSInteger kDefaultRoomType = 1;
 
 - (void)guestTapped {
   self.nowSelecting = SelectingGuest;
-  self.roomTypeOrGuestPickerView.hidden = NO;
+  self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.roomTypeOrGuestPickerView selectRow: self.selectedGuest inComponent: 0 animated: YES];
+  [self.entityPickerView selectRow: self.selectedGuest inComponent: 0 animated: YES];
   [self updateUI];
 }
 - (void)arrivalTapped {
   self.nowSelecting = SelectingArrival;
   self.datePickerView.hidden = NO;
-  self.roomTypeOrGuestPickerView.hidden = YES;
+  self.entityPickerView.hidden = YES;
   self.datePickerView.date = self.selectedReservation.arrival;
   [self updateUI];
 }
 - (void)departureTapped {
   self.nowSelecting = SelectingDeparture;
   self.datePickerView.hidden = NO;
-  self.roomTypeOrGuestPickerView.hidden = YES;
+  self.entityPickerView.hidden = YES;
   self.datePickerView.date = self.selectedReservation.departure;
   [self updateUI];
 }
@@ -262,9 +262,9 @@ static const NSInteger kDefaultRoomType = 1;
 //}
 - (void)roomTypeTapped {
   self.nowSelecting = SelectingRoomType;
-  self.roomTypeOrGuestPickerView.hidden = NO;
+  self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.roomTypeOrGuestPickerView selectRow: self.selectedReservation.roomType.integerValue inComponent: 0 animated: YES];
+  [self.entityPickerView selectRow: self.selectedReservation.roomType.integerValue inComponent: 0 animated: YES];
   [self updateUI];
 }
 
@@ -287,7 +287,7 @@ static const NSInteger kDefaultRoomType = 1;
 #pragma mark - UITableViewDataSource
   
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if (self.newReservation) {
+  if (self.isNewReservation) {
     return self.queryRooms ? self.queryRooms.count : 0;
   } else {
     return [CoreDataStack sharedInstance].savedReservations.count;
@@ -296,10 +296,10 @@ static const NSInteger kDefaultRoomType = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-  ReservationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"ReservationCell" forIndexPath: indexPath];
+  TableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"TableCell" forIndexPath: indexPath];
   AttributedString *atString = [[AttributedString alloc] init];
   
-  if (self.newReservation) {
+  if (self.isNewReservation) {
     Room* room = self.queryRooms[indexPath.row];
 
     [atString assignHeadline: [ViewUtility roomNumber: room.number] withSelector: nil];
@@ -314,6 +314,8 @@ static const NSInteger kDefaultRoomType = 1;
     [atString assignBody: reservation.hotel.name withSelector: nil];
     [atString assignBody2: [ViewUtility roomType: reservation.roomType] withSelector: nil];
   }
+  cell.textView.backgroundColor = [UIColor apricot];
+  cell.borderColor = [UIColor darkVenetianRed];
   cell.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
   return cell;
 }
@@ -321,13 +323,12 @@ static const NSInteger kDefaultRoomType = 1;
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (self.newReservation) {
+  if (self.isNewReservation) {
     self.selectedReservation.hotel = [self.queryRooms[indexPath.row] hotel];
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
   } else {
     self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
-    NSLog(@"selected row %lu %@", indexPath.row, self.selectedReservation.guest.lastName);
   }
   [self updateTextView];
 }

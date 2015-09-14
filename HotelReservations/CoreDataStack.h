@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 @class Reservation;
+@class Room;
+@class Hotel;
+@class Guest;
 
 @interface CoreDataStack : NSObject
 
@@ -23,23 +26,25 @@
 
 - (NSInteger) fetchHotelCount;
 - (void) fetchHotels;
-- (void) fetchHotelsAscendingOnKey: (NSString *)key;
-- (NSArray *) hotelsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
-- (NSArray *) hotelsAscendingOnKey:(NSString *)key subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value;
+- (void) fetchHotelsAscendingOnKeys:(NSArray *)sortKeys;
+- (NSArray *) hotelsAscendingOnKeys:(NSArray *)sortKeys whereKey: (NSString *)whereKey isEqualTo: (id)value;
+- (NSArray *) hotelsAscendingOnKeys:(NSArray *)sortKeys subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value;
 
 - (NSInteger) fetchRoomCount;
 - (void) fetchRooms;
-- (void) fetchRoomsAscendingOnKey:(NSString *)key;
+- (void) fetchRoomsAscendingOnKeys:(NSArray *)sortKeys;
 - (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys whereKey:(NSString *)whereKey isEqualTo:(id)value;
-- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys usingReservation:(Reservation *)reservation;
+- (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys usingReservation:(Reservation *)reservation;
+- (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys usingRoom:(Room *)room;
 - (NSArray *) roomsAscendingOnKeys:(NSArray *)sortKeys subQueryKey:(NSString *)subQueryKey subQueryWhereKey:(NSString *)subQueryWhereKey isEqualTo:(id)value;
 
 - (NSInteger) fetchGuestCount;
 - (void) fetchGuests;
+- (void) fetchGuestsAscendingOnKeys:(NSArray *)sortKeys;
 
 - (NSInteger) fetchReservationCount;
 - (void) fetchReservations;
-- (void) fetchReservationsAscendingOnKey: (NSString *)key;
-- (NSArray *) reservationsAscendingOnKey: (NSString *)key whereKey: (NSString *)whereKey isEqualTo: (id)value;
+- (void) fetchReservationsAscendingOnKeys:(NSArray *)sortKeys;
+- (NSArray *) reservationsAscendingOnKeys:(NSArray *)sortKeys whereKey: (NSString *)whereKey isEqualTo: (id)value;
 
 @end

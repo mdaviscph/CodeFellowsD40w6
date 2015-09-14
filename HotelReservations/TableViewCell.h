@@ -1,5 +1,5 @@
 //
-//  ReservationTableViewCell.h
+//  TableViewCell.h
 //  HotelReservations
 //
 //  Created by mike davis on 9/11/15.
@@ -9,8 +9,9 @@
 #import "Reservation.h"
 #import <UIKit/UIKit.h>
 
-@interface ReservationTableViewCell : UITableViewCell
+@interface TableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UIColor *borderColor;
 
 @end

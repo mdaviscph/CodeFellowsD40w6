@@ -7,7 +7,7 @@
 //
 
 #import "GuestListViewController.h"
-#import "GuestTableViewCell.h"
+#import "TableViewCell.h"
 #import "UIViewExtension.h"
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
@@ -64,7 +64,7 @@
   [super viewDidLoad];
   
   self.tableView.dataSource = self;
-  [self.tableView registerClass: [GuestTableViewCell class] forCellReuseIdentifier: @"GuestCell"];
+  [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
   
   [[CoreDataStack sharedInstance] fetchGuests];
   [self updateUI];
@@ -83,9 +83,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  GuestTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"GuestCell" forIndexPath: indexPath];
+  TableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"GuestCell" forIndexPath: indexPath];
 
-  cell.guest = [CoreDataStack sharedInstance].savedGuests[indexPath.row];
+  //cell.textView.text = [CoreDataStack sharedInstance].savedGuests[indexPath.row];
   return cell;
 }
 
