@@ -24,6 +24,7 @@
 
 @property (strong, nonatomic) NSString *headlinePlacehoder;
 @property (strong, nonatomic) NSString *subheadlinePlacehoder;
+@property (strong, nonatomic) NSString *bodyPlaceholder;
 
 @property (strong, nonatomic) NSString *headlineSelector;
 @property (strong, nonatomic) NSString *subheadlineSelector;
@@ -50,8 +51,9 @@
   self.subheadlinePlacehoder = placehoder;
   self.subheadlineSelector = selector;
 }
-- (void) assignBody:(NSString *)body withSelector:(NSString *)selector {
+- (void) assignBody:(NSString *)body withPlaceholder:(NSString *)placeholder withSelector:(NSString *)selector {
   self.body = body;
+  self.bodyPlaceholder = placeholder;
   self.bodySelector = selector;
 }
 - (void) assignFootnote:(NSString *)footnote withSelector:(NSString *)selector {
@@ -87,9 +89,11 @@
   
   BOOL useHeadlinePlaceholder = !self.headline && !self.headline2 && self.headlinePlacehoder;
   BOOL useSubheadlinePlaceholder = !self.subheadline && !self.subheadline2 && self.subheadlinePlacehoder;
+  BOOL useBodyPlaceholder = !self.body && !self.body2 && self.bodyPlaceholder;
   
   UIFontDescriptorSymbolicTraits headlineTraits = useHeadlinePlaceholder ? UIFontDescriptorTraitItalic : 0;
   UIFontDescriptorSymbolicTraits subheadlineTraits = useSubheadlinePlaceholder ? UIFontDescriptorTraitItalic : 0;
+  UIFontDescriptorSymbolicTraits bodyTraits = useBodyPlaceholder ? UIFontDescriptorTraitItalic : 0;
   
   UIFontDescriptor *headlineDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle: UIFontTextStyleHeadline];
   headlineDescriptor = [headlineDescriptor fontDescriptorWithSymbolicTraits: headlineTraits];
@@ -99,7 +103,10 @@
   subheadlineDescriptor = [subheadlineDescriptor fontDescriptorWithSymbolicTraits: subheadlineTraits];
   UIFont *subheadlineFont = [UIFont fontWithDescriptor: subheadlineDescriptor size: 0]; // 0 retains the font size
 
-  UIFont *bodyFont        = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
+  UIFontDescriptor *bodyDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle: UIFontTextStyleBody];
+  bodyDescriptor = [bodyDescriptor fontDescriptorWithSymbolicTraits: bodyTraits];
+  UIFont *bodyFont = [UIFont fontWithDescriptor: bodyDescriptor size: 0]; // 0 retains the font size
+
   UIFont *footnoteFont    = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
   UIFont *captionFont     = [UIFont preferredFontForTextStyle: UIFontTextStyleCaption2];
   
@@ -134,10 +141,11 @@
   
   NSString *headlinePlaceholder = useHeadlinePlaceholder ? [self.headlinePlacehoder stringByAppendingString: @"\n"] : @"";
   NSString *subheadlinePlaceholder = useSubheadlinePlaceholder ? [self.subheadlinePlacehoder stringByAppendingString: @"\n"] : @"";
+  NSString *bodyPlaceholder = useBodyPlaceholder ? [self.bodyPlaceholder stringByAppendingString: @"\n"] : @"";
   
   NSString *headline     = self.headline     ? [self.headline stringByAppendingString: headlineSeparator] : headlinePlaceholder;
   NSString *subheadline  = self.subheadline  ? [self.subheadline stringByAppendingString: subheadlineSeparator] : subheadlinePlaceholder;
-  NSString *body         = self.body         ? [self.body stringByAppendingString: bodySeparator] : @"";
+  NSString *body         = self.body         ? [self.body stringByAppendingString: bodySeparator] : bodyPlaceholder;
   NSString *footnote     = self.footnote     ? [self.footnote stringByAppendingString: footnoteSeparator] : @"";
   NSString *caption      = self.caption      ? [self.caption stringByAppendingString: captionSeparator] : @"";
   NSString *headline2    = self.headline2    ? [self.headline2 stringByAppendingString: @"\n"] : @"";

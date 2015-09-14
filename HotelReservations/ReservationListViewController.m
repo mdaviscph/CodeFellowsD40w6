@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = 0;
+static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be used in picker view
 
 @interface ReservationListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -104,7 +104,7 @@ static const NSInteger kDefaultRoomType = 0;
 
   self.edgesForExtendedLayout = UIRectEdgeNone;
   
-  self.navigationItem.title = @"Reservations";
+  self.navigationItem.title = NSLocalizedString(@"Reservations", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
 
   self.textView.delegate = self;
@@ -170,12 +170,13 @@ static const NSInteger kDefaultRoomType = 0;
 - (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
   NSString *guestPlaceholder = self.isNewReservation ? [ViewUtility guestPlaceholder] : nil;
+  NSString *roomTypePlaceholder = self.newReservation ? [ViewUtility roomTypePlaceholder] : nil;
 
   [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
-  [atString assignSubheadline: [ViewUtility dateOnly: self.selectedReservation.arrival] withPlaceholder: nil withSelector: @"arrivalTapped"];
-  [atString assignSubheadline2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
-  [atString assignBody: self.selectedReservation.hotel.name withSelector: nil];
-  [atString assignBody2: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: @"roomTypeTapped"];
+  [atString assignSubheadline: self.selectedReservation.hotel.name withPlaceholder: nil withSelector: nil];
+  [atString assignBody: [ViewUtility roomType: self.selectedReservation.roomType] withPlaceholder: roomTypePlaceholder withSelector: @"roomTypeTapped"];
+  [atString assignFootnote: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
+  [atString assignFootnote2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
   
   self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
@@ -211,6 +212,7 @@ static const NSInteger kDefaultRoomType = 0;
   self.selectedReservation.arrival = [NSDate date];
   self.selectedReservation.departure = [NSDate date];
   
+  self.navigationItem.title = NSLocalizedString(@"Make a Reservation", @"navigation item title");
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
   [self queryForAvailableRooms];
@@ -225,6 +227,7 @@ static const NSInteger kDefaultRoomType = 0;
   
   self.textView.selectable = NO;
 
+  self.navigationItem.title = NSLocalizedString(@"Reservations", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
 
   if (self.selectedReservation.hotel && self.selectedReservation.guest) {
@@ -313,10 +316,10 @@ static const NSInteger kDefaultRoomType = 0;
     Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
     
     [atString assignHeadline: [ViewUtility nameWithLast: reservation.guest.lastName first: reservation.guest.firstName] withPlaceholder: nil withSelector: nil];
-    [atString assignSubheadline: [ViewUtility dateOnly: reservation.arrival] withPlaceholder: nil withSelector: nil];
-    [atString assignSubheadline2: [ViewUtility dateOnly: reservation.departure] withSelector: nil];
-    [atString assignBody: reservation.hotel.name withSelector: nil];
-    [atString assignBody2: [ViewUtility roomType: reservation.roomType] withSelector: nil];
+    [atString assignSubheadline: reservation.hotel.name withPlaceholder: nil withSelector: nil];
+    [atString assignBody: [ViewUtility roomType: reservation.roomType] withPlaceholder: nil withSelector: nil];
+    [atString assignFootnote: [ViewUtility dateOnly: reservation.arrival] withSelector: nil];
+    [atString assignFootnote2: [ViewUtility dateOnly: reservation.departure] withSelector: nil];
   }
   cell.textView.backgroundColor = [UIColor apricot];
   cell.borderColor = [UIColor darkVenetianRed];

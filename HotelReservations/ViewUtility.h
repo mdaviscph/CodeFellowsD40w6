@@ -26,5 +26,5 @@
 
 + (NSString *)hotelPlaceholder;
 + (NSString *)guestPlaceholder;
-
++ (NSString *)roomTypePlaceholder;
 @end

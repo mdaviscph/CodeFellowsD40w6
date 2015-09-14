@@ -22,8 +22,8 @@
 
 + (NSString *)roomType:(NSNumber *)type {
   NSString *typeOfRoom;
-  if (type.integerValue == -1) {
-    typeOfRoom = NSLocalizedString(@"Out of Service", @"room type description");
+  if (type.integerValue < 0) {
+    typeOfRoom = nil;
   }
   else if (type.integerValue >= 0 && type.integerValue < [ViewUtility roomTypes].count) {
     typeOfRoom = [ViewUtility roomTypes][type.integerValue];
@@ -34,7 +34,7 @@
 }
 
 + (NSArray *)roomTypes {
-  return @[NSLocalizedString(@"Single Room, Queen Bed", @"room type description"), NSLocalizedString(@"Single Room, Two Queen Beds", @"room type description"), NSLocalizedString(@"One-Room Suite, King Bed", @"room type description"), NSLocalizedString(@"Two-Room Suite, King Beds", @"room type description")];
+  return @[NSLocalizedString(@"Single Room, Queen Bed", @"room type description"), NSLocalizedString(@"Single Room, King Bed", @"room type description"), NSLocalizedString(@"Single Room, Two Queen Beds", @"room type description"), NSLocalizedString(@"One-Room Suite, King Bed", @"room type description"), NSLocalizedString(@"Two-Room Suite, King Beds", @"room type description")];
 }
 
 + (NSString *)clean:(BOOL)cleaned {
@@ -60,6 +60,9 @@
 
 // TODO: format for locale
 + (NSString *)dateOnly:(NSDate *)date {
+  if (!date) {
+    return nil;
+  }
   NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
   dateFormatter.dateFormat = @"MM/dd/yyyy";
   return [dateFormatter stringFromDate: date];
@@ -70,5 +73,8 @@
 }
 + (NSString *)guestPlaceholder {
   return NSLocalizedString(@"select a guest...", @"used as placeholder text");
+}
++ (NSString *)roomTypePlaceholder {
+  return NSLocalizedString(@"select a room type...", @"used as placeholder text");
 }
 @end

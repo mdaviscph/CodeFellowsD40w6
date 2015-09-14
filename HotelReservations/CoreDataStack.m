@@ -201,6 +201,7 @@ NSString *reservationKey = @"Reservation";
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (guest = nil OR (bookedIn > %@ OR bookedOut < %@))", reservation.roomType, reservation.departure, reservation.arrival];
+  NSLog(@"query: %@", predicate.predicateFormat);
   request.predicate = predicate;
   
   request.sortDescriptors = [self sortDescriptorsFrom: sortKeys];
@@ -216,7 +217,17 @@ NSString *reservationKey = @"Reservation";
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type = %@ AND hotel.name = %@ AND (bookedIn > %@ OR bookedOut < %@)", room.type, room.hotel.name, room.bookedOut, room.bookedIn];
+  NSPredicate * predicate;
+  if (room.hotel && room.type.integerValue != -1) {
+    predicate = [NSPredicate predicateWithFormat:@"type = %@ AND hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, room.hotel.name, room.bookedOut, room.bookedIn];
+  } else if (room.hotel && room.type.integerValue == -1) {
+      predicate = [NSPredicate predicateWithFormat:@"hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.hotel.name, room.bookedOut, room.bookedIn];
+  } else if (!room.hotel && room.type.integerValue != -1) {
+      predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, room.bookedOut, room.bookedIn];
+  } else {
+    predicate = [NSPredicate predicateWithFormat:@"bookedIn = nil OR bookedIn > %@ OR bookedOut < %@", room.bookedOut, room.bookedIn];
+  }
+  NSLog(@"query: %@", predicate.predicateFormat);
   request.predicate = predicate;
   
   request.sortDescriptors = [self sortDescriptorsFrom: sortKeys];

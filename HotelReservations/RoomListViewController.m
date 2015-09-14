@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = 0;
+static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to be used in picker view
 
 @interface RoomListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -103,7 +103,7 @@ static const NSInteger kDefaultRoomType = 0;
   
   self.edgesForExtendedLayout = UIRectEdgeNone;
   
-  self.navigationItem.title = @"Rooms";
+  self.navigationItem.title = NSLocalizedString(@"Rooms", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
   
   self.textView.delegate = self;
@@ -140,7 +140,7 @@ static const NSInteger kDefaultRoomType = 0;
   self.tableViewSpacer.backgroundColor = [UIColor middleRed];
   
   [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 85 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 100 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
   [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.entityPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
@@ -170,11 +170,12 @@ static const NSInteger kDefaultRoomType = 0;
   AttributedString *atString = [[AttributedString alloc] init];
   NSString *hotelPlaceholder = self.isNewBooking ? [ViewUtility hotelPlaceholder] : nil;
   NSString *guestPlaceholder = self.isNewBooking ? [ViewUtility guestPlaceholder] : nil;
+  NSString *roomTypePlaceholder = self.newBooking ? [ViewUtility roomTypePlaceholder] : nil;
 
   [atString assignHeadline: self.selectedRoom.hotel.name withPlaceholder: hotelPlaceholder withSelector: @"hotelTapped"];
   [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
   [atString assignSubheadline: [ViewUtility nameWithLast: self.selectedRoom.guest.lastName first: self.selectedRoom.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
-  [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withSelector: @"roomTypeTapped"];
+  [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withPlaceholder: roomTypePlaceholder withSelector: @"roomTypeTapped"];
   [atString assignFootnote: [ViewUtility dateOnly: self.selectedRoom.bookedIn] withSelector: @"arrivalTapped"];
   [atString assignFootnote2: [ViewUtility dateOnly: self.selectedRoom.bookedOut] withSelector: @"departureTapped"];
   
@@ -213,6 +214,7 @@ static const NSInteger kDefaultRoomType = 0;
   self.selectedRoom.bookedIn = [NSDate date];
   self.selectedRoom.bookedOut = [NSDate date];
   
+  self.navigationItem.title = NSLocalizedString(@"Assign a Room", @"navigation item title");
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
   [self queryForAvailableRooms];
@@ -228,6 +230,7 @@ static const NSInteger kDefaultRoomType = 0;
   
   self.textView.selectable = NO;
   
+  self.navigationItem.title = NSLocalizedString(@"Rooms", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
   
   if (self.selectedRoom.number && self.selectedRoom.guest) {
@@ -323,8 +326,10 @@ static const NSInteger kDefaultRoomType = 0;
     
     [atString assignHeadline: [ViewUtility roomNumber: room.number] withPlaceholder: nil withSelector: nil];
     [atString assignHeadline2: room.hotel.name withSelector: nil];
-    [atString assignBody: [ViewUtility dollarRating: room.rate] withSelector: nil];
-    [atString assignBody2: [ViewUtility roomType: self.selectedRoom.type] withSelector: nil];
+    [atString assignBody: [ViewUtility dollarRating: room.rate] withPlaceholder: nil withSelector: nil];
+    [atString assignBody2: [ViewUtility roomType: room.type] withSelector: nil];
+    [atString assignCaption: [ViewUtility dateOnly: room.bookedIn] withSelector: nil];
+    [atString assignCaption2: [ViewUtility dateOnly: room.bookedOut] withSelector: nil];
   }
   cell.textView.backgroundColor = [UIColor apricot];
   cell.borderColor = [UIColor darkVenetianRed];
@@ -435,8 +440,8 @@ static const NSInteger kDefaultRoomType = 0;
       break;
     case SelectingHotel:
       self.selectedRoom.hotel = [CoreDataStack sharedInstance].savedHotels[row];
-      self.selectedGuest = row;
-      [self updateUI];
+      self.selectedHotel = row;
+      [self queryForAvailableRooms];
       break;
     default:
       break;

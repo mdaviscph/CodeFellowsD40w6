@@ -13,7 +13,7 @@
 
 - (void) assignHeadline:(NSString *)headline withPlaceholder:(NSString *)placehoder withSelector:(NSString *)selector;
 - (void) assignSubheadline:(NSString *)subheadline withPlaceholder:(NSString *)placehoder withSelector:(NSString *)selector;
-- (void) assignBody:(NSString *)body withSelector:(NSString *)selector;
+- (void) assignBody:(NSString *)body withPlaceholder:(NSString *)placeholder withSelector:(NSString *)selector;
 - (void) assignFootnote:(NSString *)footnote withSelector:(NSString *)selector;
 - (void) assignCaption:(NSString *)caption withSelector:(NSString *)selector;
 - (void) assignHeadline2:(NSString *)headline2 withSelector:(NSString *)selector;
