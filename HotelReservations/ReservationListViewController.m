@@ -19,6 +19,10 @@
 #import "CoreDataStack.h"
 
 static const NSInteger kUnselectedIndex = -1;
+static const CGFloat kTableViewEstimatedRowHeight = 44;
+static const CGFloat kTextViewSpacerHeight = 7;
+static const CGFloat kTextViewHeight = 100;       // could not get textView to resize
+static const CGFloat kSelectionViewHeight = 180;
 
 @interface ReservationListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -81,7 +85,7 @@ static const NSInteger kUnselectedIndex = -1;
   if (!_tableView) {
     _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
     _tableView.allowsSelection = YES;
-    _tableView.estimatedRowHeight = 44;
+    _tableView.estimatedRowHeight = kTableViewEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.backgroundColor = [UIColor darkVenetianRed];
   }
@@ -141,14 +145,14 @@ static const NSInteger kUnselectedIndex = -1;
   self.tableViewSpacer = [[UIView alloc] init];
   self.tableViewSpacer.backgroundColor = [UIColor middleRed];
   
-  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 100 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: kTextViewHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
-  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: kSelectionViewHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.entityPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.datePickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
-  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.tableViewSpacer height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
 }
 
@@ -156,9 +160,9 @@ static const NSInteger kUnselectedIndex = -1;
   
   [self.view removeConstraints: self.tableViewSpacerConstraints];
   if (self.isNewReservation) {
-    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.selectionView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.selectionView height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   } else {
-    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+    self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: self.view withViewAbove: self.textView height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   }
   [self.view layoutIfNeeded];
 }
@@ -340,13 +344,13 @@ static const NSInteger kUnselectedIndex = -1;
   AttributedString *atString = [[AttributedString alloc] init];
   
   if (self.isNewReservation) {
-    Room* room = self.queryRooms[indexPath.row];
+    Room* room = self.queryRooms[MIN(indexPath.row, self.queryRooms.count - 1)]; // MIN due to switching backing array race
 
     [atString assignHeadline: [ViewUtility roomNumber: room.number] withPlaceholder: nil withSelector: nil];
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignCaption: [ViewUtility roomType: self.selectedReservation.roomType] withSelector: nil];
   } else {
-    Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
+    Reservation* reservation = [CoreDataStack sharedInstance].savedReservations[MIN(indexPath.row, [CoreDataStack sharedInstance].savedReservations.count - 1)];   // MIN due to switching backing array race
     
     [atString assignHeadline: [ViewUtility nameWithLast: reservation.guest.lastName first: reservation.guest.firstName] withPlaceholder: nil withSelector: nil];
     [atString assignSubheadline: reservation.hotel.name withPlaceholder: nil withSelector: nil];

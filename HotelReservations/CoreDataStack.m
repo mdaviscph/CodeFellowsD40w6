@@ -25,10 +25,11 @@ static const NSInteger kInvalidRoomType = -1;
 
 @end
 
-NSString *hotelKey = @"Hotel";
-NSString *roomKey = @"Room";
-NSString *guestKey = @"Guest";
-NSString *reservationKey = @"Reservation";
+// entity name keys
+static NSString *hotelKey = @"Hotel";
+static NSString *roomKey = @"Room";
+static NSString *guestKey = @"Guest";
+static NSString *reservationKey = @"Reservation";
 
 @implementation CoreDataStack
 

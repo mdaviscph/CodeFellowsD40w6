@@ -13,6 +13,9 @@
 
 @end
 
+static const CGFloat kCellBorderWidth = 2.0;
+static const CGFloat kCellBorderHeight = 3.0;
+
 @implementation TableViewCell
 
 #pragma mark - Public Property Getters, Setters
@@ -37,7 +40,7 @@
   backgroundView.backgroundColor = self.borderColor;
   [backgroundView addToSuperViewWithConstraints: self.contentView];
   
-  [self.textView addToSuperViewWithConstraintsForBorder: backgroundView verticalSpacing: 4 horizontalSpacing: 3];
+  [self.textView addToSuperViewWithConstraintsForBorder: backgroundView verticalSpacing: kCellBorderHeight horizontalSpacing: kCellBorderWidth];
 }
 
 - (CGSize)sizeThatFits: (CGSize)size {

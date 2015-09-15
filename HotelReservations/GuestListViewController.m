@@ -15,6 +15,10 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
+static const CGFloat kTableViewEstimatedRowHeight = 44;
+static const CGFloat kTextViewSpacerHeight = 7;
+static const CGFloat kTextViewHeight = 100;       // could not get textView to resize
+
 @interface GuestListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) UITextView *textView;
@@ -45,7 +49,7 @@
   if (!_tableView) {
     _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
     _tableView.allowsSelection = YES;
-    _tableView.estimatedRowHeight = 44;
+    _tableView.estimatedRowHeight = kTableViewEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.backgroundColor = [UIColor vanDykeBrown];
   }
@@ -91,10 +95,10 @@
   self.tableViewSpacer = [[UIView alloc] init];
   self.tableViewSpacer.backgroundColor = [UIColor gold];
   
-  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 100 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: kTextViewHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
-  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: kTextViewSpacerHeight topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.tableViewSpacer height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
 }
 
