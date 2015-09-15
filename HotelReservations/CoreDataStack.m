@@ -200,7 +200,12 @@ NSString *reservationKey = @"Reservation";
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (guest = nil OR (bookedIn > %@ OR bookedOut < %@))", reservation.roomType, reservation.departure, reservation.arrival];
+  NSPredicate * predicate;
+  if (reservation.roomType.integerValue != -1) {
+    predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (guest = nil OR (bookedIn > %@ OR bookedOut < %@))", reservation.roomType, reservation.departure, reservation.arrival];
+  } else {
+    predicate = [NSPredicate predicateWithFormat:@"guest = nil OR (bookedIn > %@ OR bookedOut < %@)", reservation.departure, reservation.arrival];    
+  }
   NSLog(@"query: %@", predicate.predicateFormat);
   request.predicate = predicate;
   

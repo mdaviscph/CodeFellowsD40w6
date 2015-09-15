@@ -23,6 +23,15 @@
   room.number = jsonDictionary[@"number"];
   room.type = jsonDictionary[@"type"];
   room.rate = jsonDictionary[@"rate"];
+  NSString *bookedInDate = jsonDictionary[@"bookIn"];
+  NSString *bookedOutDate = jsonDictionary[@"bookOut"];
+  
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  dateFormatter.dateFormat = @"yyyyMMdd";
+  
+  room.bookedIn = [dateFormatter dateFromString: bookedInDate];
+  room.bookedOut = [dateFormatter dateFromString: bookedOutDate];
+
   NSString *guestLastName = jsonDictionary[@"guestLastName"];
   NSString *guestFirstName = jsonDictionary[@"guestFirstName"];
   

@@ -21,7 +21,7 @@
 
 + (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName;
 
-+ (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate;
++ (NSString *)datesWithDurationFromStart:(NSDate *)startDate toEnd:(NSDate *)endDate;
 + (NSString *)dateOnly:(NSDate *)date;
 
 + (NSString *)hotelPlaceholder;

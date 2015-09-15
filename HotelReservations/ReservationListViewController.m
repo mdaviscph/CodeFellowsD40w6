@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be used in picker view
+static const NSInteger kUnselectedIndex = -1;
 
 @interface ReservationListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -31,7 +31,8 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
 @property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
 
 @property (strong, nonatomic) NSArray *queryRooms;
-@property (nonatomic) NSInteger selectedGuest;      // TODO: better way to keep track or index of selected guest since we are sharing PickerView
+@property (nonatomic) NSInteger selectedGuestIndex;
+@property (nonatomic) NSInteger selectedQueryRoomIndex;
 
 @end
 
@@ -141,7 +142,7 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
   self.tableViewSpacer.backgroundColor = [UIColor middleRed];
   
   [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 85 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 100 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   
   [self.selectionView addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 180 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
   [self.entityPickerView addToSuperViewWithConstraintsAndIntrinsicHeight: self.selectionView withViewAbove: nil topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
@@ -169,15 +170,23 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
 }
 - (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
-  NSString *guestPlaceholder = self.isNewReservation ? [ViewUtility guestPlaceholder] : nil;
-  NSString *roomTypePlaceholder = self.newReservation ? [ViewUtility roomTypePlaceholder] : nil;
 
-  [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
-  [atString assignSubheadline: self.selectedReservation.hotel.name withPlaceholder: nil withSelector: nil];
-  [atString assignBody: [ViewUtility roomType: self.selectedReservation.roomType] withPlaceholder: roomTypePlaceholder withSelector: @"roomTypeTapped"];
-  [atString assignFootnote: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
-  [atString assignFootnote2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
-  
+  if (self.isNewReservation) {
+    Guest *guest = self.selectedGuestIndex != kUnselectedIndex ? [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex] : nil;
+    NSString *hotelName = self.selectedQueryRoomIndex != kUnselectedIndex ? [self.queryRooms[self.selectedQueryRoomIndex] hotel].name : nil;
+    [atString assignHeadline: [ViewUtility nameWithLast: guest.lastName first: guest.firstName] withPlaceholder: [ViewUtility guestPlaceholder] withSelector: @"guestTapped"];
+    [atString assignSubheadline: hotelName withPlaceholder: nil withSelector: nil];
+    [atString assignBody: [ViewUtility roomType: self.selectedReservation.roomType] withPlaceholder: [ViewUtility roomTypePlaceholder] withSelector: @"roomTypeTapped"];
+    [atString assignFootnote: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
+    [atString assignFootnote2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
+
+  } else {
+    [atString assignHeadline: [ViewUtility nameWithLast: self.selectedReservation.guest.lastName first: self.selectedReservation.guest.firstName] withPlaceholder: nil withSelector: @"guestTapped"];
+    [atString assignSubheadline: self.selectedReservation.hotel.name withPlaceholder: nil withSelector: nil];
+    [atString assignBody: [ViewUtility roomType: self.selectedReservation.roomType] withPlaceholder: nil withSelector: @"roomTypeTapped"];
+    [atString assignFootnote: [ViewUtility dateOnly: self.selectedReservation.arrival] withSelector: @"arrivalTapped"];
+    [atString assignFootnote2: [ViewUtility dateOnly: self.selectedReservation.departure] withSelector: @"departureTapped"];
+  }
   self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 - (void) updateSelectionView {
@@ -205,16 +214,23 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
   [self adjustTableViewSpacingUsingContraints];
   self.textView.selectable = YES;
   
+  // create an unassociated object to user until we are ready to save; downside is that
+  // we cannot save the associated guest with an unassociated object
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
-  self.selectedReservation = [NSEntityDescription insertNewObjectForEntityForName: @"Reservation" inManagedObjectContext: context];
-  
-  self.selectedReservation.roomType = @(kDefaultRoomType);
+  NSEntityDescription *entity = [NSEntityDescription entityForName: @"Reservation" inManagedObjectContext: context];
+  self.selectedReservation = [[Reservation alloc] initWithEntity: entity insertIntoManagedObjectContext: nil];
+
+  self.selectedReservation.roomType = @(kUnselectedIndex);
+  self.selectedGuestIndex = kUnselectedIndex;
+  self.selectedQueryRoomIndex = kUnselectedIndex;
   self.selectedReservation.arrival = [NSDate date];
   self.selectedReservation.departure = [NSDate date];
   
   self.navigationItem.title = NSLocalizedString(@"Make a Reservation", @"navigation item title");
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
+  self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonTapped)];
+
   [self queryForAvailableRooms];
   
   self.selectionView.hidden = NO;
@@ -229,26 +245,41 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
 
   self.navigationItem.title = NSLocalizedString(@"Reservations", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
+  self.navigationItem.leftBarButtonItem = nil;
 
-  if (self.selectedReservation.hotel && self.selectedReservation.guest) {
-    // TODO: figure out the way to only save this reservation.
+  if (self.selectedQueryRoomIndex != kUnselectedIndex && self.selectedGuestIndex != kUnselectedIndex && self.selectedReservation.arrival && self.selectedReservation.departure && self.selectedReservation.roomType.integerValue != kUnselectedIndex) {
+
+    // associate object in order to save
+    NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+    [context insertObject: self.selectedReservation];
+
+    // connect related objects
+    self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex];
+    self.selectedReservation.hotel = [self.queryRooms[self.selectedQueryRoomIndex] hotel];
+
     [[CoreDataStack sharedInstance] saveAll];
+    [[CoreDataStack sharedInstance] fetchReservationsAscendingOnKeys: @[@"arrival"]];
   }
 
   self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
   self.selectionView.hidden = YES;
 
-  [[CoreDataStack sharedInstance] fetchReservations];
-  self.selectedReservation = [CoreDataStack sharedInstance].savedReservations.lastObject;
+  self.selectedReservation = [CoreDataStack sharedInstance].savedReservations.firstObject;
   [self updateUI];
+}
+- (void)cancelButtonTapped {
+  self.selectedQueryRoomIndex = kUnselectedIndex;
+  [self saveButtonTapped];
 }
 
 - (void)guestTapped {
   self.nowSelecting = SelectingGuest;
   self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.entityPickerView selectRow: self.selectedGuest inComponent: 0 animated: YES];
+  if (self.selectedGuestIndex != kUnselectedIndex) {
+    [self.entityPickerView selectRow: self.selectedGuestIndex inComponent: 0 animated: YES];
+  }
   [self updateUI];
 }
 - (void)arrivalTapped {
@@ -271,7 +302,9 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
   self.nowSelecting = SelectingRoomType;
   self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.entityPickerView selectRow: self.selectedReservation.roomType.integerValue inComponent: 0 animated: YES];
+  if (self.selectedReservation.roomType.integerValue != kUnselectedIndex) {
+    [self.entityPickerView selectRow: self.selectedReservation.roomType.integerValue inComponent: 0 animated: YES];
+  }
   [self updateUI];
 }
 
@@ -331,7 +364,9 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   if (self.isNewReservation) {
-    self.selectedReservation.hotel = [self.queryRooms[indexPath.row] hotel];
+    // retaining hotel indicates we are ready to save
+    //self.selectedReservation.hotel = [self.queryRooms[indexPath.row] hotel];
+    self.selectedQueryRoomIndex = indexPath.row;
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
   } else {
     self.selectedReservation = [CoreDataStack sharedInstance].savedReservations[indexPath.row];
@@ -414,8 +449,8 @@ static const NSInteger kDefaultRoomType = -1;   // causes placeholder text to be
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
   switch (self.nowSelecting) {
     case SelectingGuest:
-      self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests[row];
-      self.selectedGuest = row;
+      //self.selectedReservation.guest = [CoreDataStack sharedInstance].savedGuests[row];
+      self.selectedGuestIndex = row;
       [self updateUI];
       break;
     case SelectingRoomType:

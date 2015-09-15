@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to be used in picker view
+static const NSInteger kUnselectedIndex = -1;
 
 @interface RoomListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -30,8 +30,9 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
 @property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
 
 @property (strong, nonatomic) NSArray *queryRooms;
-@property (nonatomic) NSInteger selectedGuest;      // TODO: better way to keep track or index of selected guest since we are sharing PickerView
-@property (nonatomic) NSInteger selectedHotel;      // TODO: better way to keep track or index of selected hotel since we are sharing PickerView
+@property (nonatomic) NSInteger selectedGuestIndex;
+@property (nonatomic) NSInteger selectedHotelIndex;
+@property (nonatomic) NSInteger selectedRoomIndex;
 
 @end
 
@@ -168,17 +169,25 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
 }
 - (void) updateTextView {
   AttributedString *atString = [[AttributedString alloc] init];
-  NSString *hotelPlaceholder = self.isNewBooking ? [ViewUtility hotelPlaceholder] : nil;
-  NSString *guestPlaceholder = self.isNewBooking ? [ViewUtility guestPlaceholder] : nil;
-  NSString *roomTypePlaceholder = self.newBooking ? [ViewUtility roomTypePlaceholder] : nil;
-
-  [atString assignHeadline: self.selectedRoom.hotel.name withPlaceholder: hotelPlaceholder withSelector: @"hotelTapped"];
-  [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
-  [atString assignSubheadline: [ViewUtility nameWithLast: self.selectedRoom.guest.lastName first: self.selectedRoom.guest.firstName] withPlaceholder: guestPlaceholder withSelector: @"guestTapped"];
-  [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withPlaceholder: roomTypePlaceholder withSelector: @"roomTypeTapped"];
-  [atString assignFootnote: [ViewUtility dateOnly: self.selectedRoom.bookedIn] withSelector: @"arrivalTapped"];
-  [atString assignFootnote2: [ViewUtility dateOnly: self.selectedRoom.bookedOut] withSelector: @"departureTapped"];
   
+  if (self.isNewBooking) {
+    Guest *guest = self.selectedGuestIndex != -1 ? [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex] : nil;
+    Hotel *hotel = self.selectedHotelIndex != -1 ? [CoreDataStack sharedInstance].savedHotels[self.selectedHotelIndex] : nil;
+    [atString assignHeadline: hotel.name withPlaceholder: [ViewUtility hotelPlaceholder] withSelector: @"hotelTapped"];
+    [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
+    [atString assignSubheadline: [ViewUtility nameWithLast: guest.lastName first: guest.firstName] withPlaceholder: [ViewUtility guestPlaceholder] withSelector: @"guestTapped"];
+    [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withPlaceholder: [ViewUtility roomTypePlaceholder] withSelector: @"roomTypeTapped"];
+    [atString assignFootnote: [ViewUtility dateOnly: self.selectedRoom.bookedIn] withSelector: @"arrivalTapped"];
+    [atString assignFootnote2: [ViewUtility dateOnly: self.selectedRoom.bookedOut] withSelector: @"departureTapped"];
+
+  } else {
+    [atString assignHeadline: self.selectedRoom.hotel.name withPlaceholder: nil withSelector: @"hotelTapped"];
+    [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
+    [atString assignSubheadline: [ViewUtility nameWithLast: self.selectedRoom.guest.lastName first: self.selectedRoom.guest.firstName] withPlaceholder: nil withSelector: @"guestTapped"];
+    [atString assignBody: [ViewUtility roomType: self.selectedRoom.type] withPlaceholder: nil withSelector: @"roomTypeTapped"];
+    [atString assignFootnote: [ViewUtility dateOnly: self.selectedRoom.bookedIn] withSelector: @"arrivalTapped"];
+    [atString assignFootnote2: [ViewUtility dateOnly: self.selectedRoom.bookedOut] withSelector: @"departureTapped"];
+  }
   self.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
 }
 - (void) updateSelectionView {
@@ -207,16 +216,24 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
   [self adjustTableViewSpacingUsingContraints];
   self.textView.selectable = YES;
   
+  // create an unassociated object to user until we are ready to save; downside is that
+  // we cannot save the associated hotel and guest with an unassociated object
   NSManagedObjectContext *context = [(AppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
-  self.selectedRoom = [NSEntityDescription insertNewObjectForEntityForName: @"Room" inManagedObjectContext: context];
+  NSEntityDescription *entity = [NSEntityDescription entityForName: @"Room" inManagedObjectContext: context];
+  self.selectedRoom = [[Room alloc] initWithEntity: entity insertIntoManagedObjectContext: nil];
   
-  self.selectedRoom.type = @(kDefaultRoomType);
+  self.selectedRoom.type = @(kUnselectedIndex);
+  self.selectedGuestIndex = kUnselectedIndex;
+  self.selectedHotelIndex = kUnselectedIndex;
+  self.selectedRoomIndex = kUnselectedIndex;
   self.selectedRoom.bookedIn = [NSDate date];
   self.selectedRoom.bookedOut = [NSDate date];
   
   self.navigationItem.title = NSLocalizedString(@"Assign a Room", @"navigation item title");
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
+  self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonTapped)];
+
   [self queryForAvailableRooms];
   
   self.selectionView.hidden = NO;
@@ -232,26 +249,39 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
   
   self.navigationItem.title = NSLocalizedString(@"Rooms", @"navigation item title");
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
+  self.navigationItem.leftBarButtonItem = nil;
   
-  if (self.selectedRoom.number && self.selectedRoom.guest) {
-    // TODO: figure out the way to only save this room booking.
+  if (self.selectedRoomIndex != kUnselectedIndex && self.selectedGuestIndex != kUnselectedIndex && self.selectedRoom.bookedIn && self.selectedRoom.type.integerValue != kUnselectedIndex) {
+
+    Room *room = [CoreDataStack sharedInstance].savedRooms[self.selectedRoomIndex];
+
+    room.bookedIn = self.selectedRoom.bookedIn;
+    room.bookedOut = self.selectedRoom.bookedOut;
+    room.guest = [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex];
+
     [[CoreDataStack sharedInstance] saveAll];
+    [[CoreDataStack sharedInstance] fetchRoomsAscendingOnKeys: @[@"hotel.name",@"number"]];
   }
   
   self.entityPickerView.hidden = YES;
   self.datePickerView.hidden = YES;
   self.selectionView.hidden = YES;
   
-  [[CoreDataStack sharedInstance] fetchRooms];
-  self.selectedRoom = [CoreDataStack sharedInstance].savedRooms.lastObject;
+  self.selectedRoom = [CoreDataStack sharedInstance].savedRooms.firstObject;
   [self updateUI];
+}
+- (void)cancelButtonTapped {
+  self.selectedRoomIndex = kUnselectedIndex;
+  [self saveButtonTapped];
 }
 
 - (void)guestTapped {
   self.nowSelecting = SelectingGuest;
   self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.entityPickerView selectRow: self.selectedGuest inComponent: 0 animated: YES];
+  if (self.selectedGuestIndex != kUnselectedIndex) {
+    [self.entityPickerView selectRow: self.selectedGuestIndex inComponent: 0 animated: YES];
+  }
   [self updateUI];
 }
 - (void)arrivalTapped {
@@ -272,14 +302,18 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
   self.nowSelecting = SelectingHotel;
   self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.entityPickerView selectRow: self.selectedHotel inComponent: 0 animated: YES];
+  if (self.selectedHotelIndex != kUnselectedIndex) {
+    [self.entityPickerView selectRow: self.selectedHotelIndex inComponent: 0 animated: YES];
+  }
   [self updateUI];
 }
 - (void)roomTypeTapped {
   self.nowSelecting = SelectingRoomType;
   self.entityPickerView.hidden = NO;
   self.datePickerView.hidden = YES;
-  [self.entityPickerView selectRow: self.selectedRoom.type.integerValue inComponent: 0 animated: YES];
+  if (self.selectedRoom.type.integerValue != kUnselectedIndex) {
+    [self.entityPickerView selectRow: self.selectedRoom.type.integerValue inComponent: 0 animated: YES];
+  }
   [self updateUI];
 }
 
@@ -321,6 +355,7 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignFootnote: [ViewUtility roomType: self.selectedRoom.type] withSelector: nil];
     [atString assignCaption: [ViewUtility clean: room.clean] withSelector: nil];
+
   } else {
     Room* room = [CoreDataStack sharedInstance].savedRooms[indexPath.row];
     
@@ -328,8 +363,8 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
     [atString assignHeadline2: room.hotel.name withSelector: nil];
     [atString assignBody: [ViewUtility dollarRating: room.rate] withPlaceholder: nil withSelector: nil];
     [atString assignBody2: [ViewUtility roomType: room.type] withSelector: nil];
-    [atString assignCaption: [ViewUtility dateOnly: room.bookedIn] withSelector: nil];
-    [atString assignCaption2: [ViewUtility dateOnly: room.bookedOut] withSelector: nil];
+    [atString assignCaption: [ViewUtility datesWithDurationFromStart: room.bookedIn toEnd: room.bookedOut] withSelector: nil];
+    [atString assignCaption2: [ViewUtility nameWithLast: room.guest.lastName first: room.guest.firstName] withSelector: nil];
   }
   cell.textView.backgroundColor = [UIColor apricot];
   cell.borderColor = [UIColor darkVenetianRed];
@@ -340,12 +375,14 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   if (self.isNewBooking) {
+    // retaining room number indicates we are ready to save
     self.selectedRoom.number = [self.queryRooms[indexPath.row] number];
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
   } else {
     self.selectedRoom = [CoreDataStack sharedInstance].savedRooms[indexPath.row];
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
   }
+  self.selectedRoomIndex = indexPath.row;
   [self updateTextView];
 }
 
@@ -430,8 +467,8 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
   switch (self.nowSelecting) {
     case SelectingGuest:
-      self.selectedRoom.guest = [CoreDataStack sharedInstance].savedGuests[row];
-      self.selectedGuest = row;
+      //self.selectedRoom.guest = [CoreDataStack sharedInstance].savedGuests[row];
+      self.selectedGuestIndex = row;
       [self updateUI];
       break;
     case SelectingRoomType:
@@ -439,8 +476,8 @@ static const NSInteger kDefaultRoomType = -1;      // causes placeholder text to
       [self queryForAvailableRooms];
       break;
     case SelectingHotel:
-      self.selectedRoom.hotel = [CoreDataStack sharedInstance].savedHotels[row];
-      self.selectedHotel = row;
+      //self.selectedRoom.hotel = [CoreDataStack sharedInstance].savedHotels[row];
+      self.selectedHotelIndex = row;
       [self queryForAvailableRooms];
       break;
     default:

@@ -53,9 +53,11 @@
   return [[lastName stringByAppendingString: @", "] stringByAppendingString: firstName];
 }
 
-// TODO: duration
-+ (NSString *)datesWithDurationFromStart:(NSDate *)startDate end:(NSDate *)endDate {
-  return [NSString stringWithFormat: @"%@ - %@", [ViewUtility dateOnly: startDate], [ViewUtility dateOnly: startDate]];
+// TODO: duration in days
++ (NSString *)datesWithDurationFromStart:(NSDate *)startDate toEnd:(NSDate *)endDate {
+  NSString *start = [ViewUtility dateOnly: startDate];
+  NSString *end = [ViewUtility dateOnly: endDate];
+  return start || end ? [NSString stringWithFormat: @"%@ - %@", start ? start : @"", end ? end : @""] : nil;
 }
 
 // TODO: format for locale

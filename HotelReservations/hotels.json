@@ -15,7 +15,9 @@
                                "type" : 2,
                                "rate" : 4,
                                "guestLastName" : "Baxter",
-                               "guestFirstName" : "Tony"
+                               "guestFirstName" : "Tony",
+                               "bookIn" : "20150922",
+                               "bookOut" : "20150927"
                             },
                             {
                                "number" : "403",
@@ -25,9 +27,7 @@
                             {
                                "number" : "404",
                                "type" : 2,
-                               "rate" : 4,
-                               "guestLastName" : "Baxter",
-                               "guestFirstName" : "Tony"
+                               "rate" : 4
                             },
                             {
                                "number" : "405",
@@ -46,7 +46,9 @@
                              "type" : 2,
                              "rate" : 3,
                              "guestLastName" : "Taylor",
-                             "guestFirstName" : "Sally"
+                             "guestFirstName" : "Sally",
+                             "bookIn" : "20150915",
+                             "bookOut" : "20150923"
                              },
                              {
                              "number" : "302",
@@ -68,7 +70,9 @@
                              "type" : 4,
                              "rate" : 3,
                              "guestLastName" : "Jones",
-                             "guestFirstName" : "Mary"
+                             "guestFirstName" : "Mary",
+                             "bookIn" : "20150921",
+                             "bookOut" : "20150923"
                              }
                           ]
               },
@@ -98,7 +102,6 @@
                              "type" : 1,
                              "rate" : 2
                              },
-
                              {
                              "number" : "205",
                              "type" : 4,
@@ -126,7 +129,9 @@
                              "type" : 2,
                              "rate" : 1,
                              "guestLastName" : "Taylor",
-                             "guestFirstName" : "Sally"
+                             "guestFirstName" : "Sally",
+                             "bookIn" : "20150921",
+                             "bookOut" : "20150923"
                              },
 
                              {
