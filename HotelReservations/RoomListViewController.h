@@ -8,7 +8,6 @@
 
 #import "Room.h"
 #import "EnumSelecting.h"
-
 #import <UIKit/UIKit.h>
 
 @interface RoomListViewController : UIViewController

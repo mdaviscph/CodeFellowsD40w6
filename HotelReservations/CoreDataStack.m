@@ -17,6 +17,8 @@
 #import "AppDelegate.h"
 #import "AlertPopover.h"
 
+static const NSInteger kInvalidRoomType = -1;
+
 @interface CoreDataStack ()
 
 @property (strong, nonatomic) NSManagedObjectContext* moContext;
@@ -201,7 +203,7 @@ NSString *reservationKey = @"Reservation";
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
   NSPredicate * predicate;
-  if (reservation.roomType.integerValue != -1) {
+  if (reservation.roomType.integerValue != kInvalidRoomType) {
     predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (guest = nil OR (bookedIn > %@ OR bookedOut < %@))", reservation.roomType, reservation.departure, reservation.arrival];
   } else {
     predicate = [NSPredicate predicateWithFormat:@"guest = nil OR (bookedIn > %@ OR bookedOut < %@)", reservation.departure, reservation.arrival];    
@@ -223,11 +225,11 @@ NSString *reservationKey = @"Reservation";
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
   NSPredicate * predicate;
-  if (hotelName && room.type.integerValue != -1) {
+  if (hotelName && room.type.integerValue != kInvalidRoomType) {
     predicate = [NSPredicate predicateWithFormat:@"type = %@ AND hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, hotelName, room.bookedOut, room.bookedIn];
-  } else if (hotelName && room.type.integerValue == -1) {
+  } else if (hotelName && room.type.integerValue == kInvalidRoomType) {
       predicate = [NSPredicate predicateWithFormat:@"hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", hotelName, room.bookedOut, room.bookedIn];
-  } else if (!hotelName && room.type.integerValue != -1) {
+  } else if (!hotelName && room.type.integerValue != kInvalidRoomType) {
       predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, room.bookedOut, room.bookedIn];
   } else {
     predicate = [NSPredicate predicateWithFormat:@"bookedIn = nil OR bookedIn > %@ OR bookedOut < %@", room.bookedOut, room.bookedIn];

@@ -12,15 +12,17 @@
 #import "UIColorExtension.h"
 #import "ViewUtility.h"
 #import "AttributedString.h"
-#import "Hotel.h"
-#import "Room.h"
 #import "AppDelegate.h"
 #import "CoreDataStack.h"
 
-@interface HotelListViewController () <UITableViewDataSource>
+@interface HotelListViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIView* tableViewSpacer;
+@property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
+
+@property (nonatomic) NSInteger selectedHotelIndex;
 
 @end
 
@@ -28,17 +30,21 @@
 
 #pragma mark - Private Property Getters, Setters
 
-- (UIView *)headerView {
-  if (!_headerView) {
-    _headerView = [[UIView alloc] init];
-    _headerView.backgroundColor = [UIColor almond];
+- (UIView *)textView {
+  if (!_textView) {
+    _textView = [[UITextView alloc] init];
+    _textView.editable = NO;
+    _textView.selectable = NO;
+    _textView.scrollEnabled = NO;
+    _textView.backgroundColor = [UIColor almond];
   }
-  return _headerView;
+  return _textView;
 }
 
 - (UITableView *)tableView {
   if (!_tableView) {
-    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
+    _tableView.allowsSelection = YES;
     _tableView.estimatedRowHeight = 44;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.backgroundColor = [UIColor vanDykeBrown];
@@ -52,29 +58,69 @@
   NSLog(@"loading list view for Hotels");
   
   UIView *rootView = [[UIView alloc] init];
-  rootView.backgroundColor = [UIColor rawSienna];
+  rootView.backgroundColor = [UIColor vanDykeBrown];
   
-  [self.headerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 192 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.headerView height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
-  
+  [self createConstraintsAndViewsForSuperView: rootView];
   self.view = rootView;
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-
+  
+  self.edgesForExtendedLayout = UIRectEdgeNone;
+  
+  self.navigationItem.title = NSLocalizedString(@"Hotels", @"navigation item title");
+  
   self.tableView.dataSource = self;
+  self.tableView.delegate = self;
   [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
-
-  [[CoreDataStack sharedInstance] fetchHotels];
+  
+  [self.textView setLinkTextAttributes: @{NSForegroundColorAttributeName : [UIColor vanDykeBrown]}];
+  
+  if ([[CoreDataStack sharedInstance] fetchHotelCount] > 0) {
+    [[CoreDataStack sharedInstance] fetchHotelsAscendingOnKeys: @[@"name"]];
+    self.selectedHotel = [CoreDataStack sharedInstance].savedHotels.firstObject;
+  }
   [self updateUI];
 }
 
-#pragma mark - Helper Methods 
+#pragma mark - Helper Methods
 
--(void) updateUI {
+- (void) createConstraintsAndViewsForSuperView:(UIView *)rootView {
+  
+  UIView* topSpacerView = [[UIView alloc] init];
+  topSpacerView.backgroundColor = [UIColor gold];
+  self.tableViewSpacer = [[UIView alloc] init];
+  self.tableViewSpacer.backgroundColor = [UIColor gold];
+  
+  [topSpacerView addToSuperViewWithConstraints: rootView withViewAbove: nil height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.textView addToSuperViewWithConstraints: rootView withViewAbove: topSpacerView height: 100 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  
+  self.tableViewSpacerConstraints = [self.tableViewSpacer addToSuperViewWithConstraints: rootView withViewAbove: self.textView height: 10 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+  [self.tableView addToSuperViewWithConstraints: rootView withViewAbove: self.tableViewSpacer height: 0 topSpacing: 0 bottomSpacing: 0 width: 0 leadingSpacing: 0 trailingSpacing: 0];
+}
+
+- (void) updateUI {
+  [self updateTextView];
+  [self updateTableView];
+}
+- (void) updateTextView {
+  AttributedString *atString = [[AttributedString alloc] init];
+  
+  [atString assignHeadline: self.selectedHotel.name withPlaceholder: nil withSelector: nil];
+  [atString assignHeadline2: [ViewUtility starRating: self.selectedHotel.rating] withSelector: nil];
+  [atString assignSubheadline: self.selectedHotel.city withPlaceholder: nil withSelector: nil];
+  [atString assignSubheadline2: self.selectedHotel.state withSelector: nil];
+  [atString assignFootnote: [ViewUtility roomCount: self.selectedHotel.rooms.count] withSelector: nil];
+  [atString assignFootnote2: [ViewUtility reservationCount: self.selectedHotel.reservations.count] withSelector: nil];
+
+  self.textView.attributedText = [atString hypertextStringWithColor: [UIColor vanDykeBrown]];
+}
+- (void) updateTableView {
   [self.tableView reloadData];
 }
+
+#pragma mark - Selector Methods
 
 #pragma mark - UITableViewDataSource
 
@@ -83,10 +129,29 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  
   TableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: @"TableCell" forIndexPath: indexPath];
+  AttributedString *atString = [[AttributedString alloc] init];
+  Hotel* hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
 
-  //cell.hotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
+  [atString assignHeadline: hotel.name withPlaceholder: nil withSelector: nil];
+  [atString assignHeadline2: [ViewUtility starRating: hotel.rating] withSelector: nil];
+  [atString assignSubheadline: hotel.city withPlaceholder: nil withSelector: nil];
+  [atString assignSubheadline2: hotel.state withSelector: nil];
+
+  cell.textView.backgroundColor = [UIColor almond];
+  cell.borderColor = [UIColor vanDykeBrown];
+  cell.textView.attributedText = [atString hypertextStringWithColor: [UIColor vanDykeBrown]];
   return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  self.selectedHotel = [CoreDataStack sharedInstance].savedHotels[indexPath.row];
+  [tableView deselectRowAtIndexPath: indexPath animated: NO];
+  self.selectedHotelIndex = indexPath.row;
+  [self updateTextView];
 }
 
 @end

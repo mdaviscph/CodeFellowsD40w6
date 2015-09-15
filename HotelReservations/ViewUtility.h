@@ -17,12 +17,16 @@
 + (NSArray *)roomTypes;
 + (NSString *)clean:(BOOL)cleaned;
 + (NSString *)roomCount:(NSUInteger)count;
++ (NSString *)roomCountRoomType:(NSUInteger)count;
+
 + (NSString *)roomNumber:(NSString *)number;
 
 + (NSString *)nameWithLast:(NSString *)lastName first:(NSString *)firstName;
 
 + (NSString *)datesWithDurationFromStart:(NSDate *)startDate toEnd:(NSDate *)endDate;
 + (NSString *)dateOnly:(NSDate *)date;
+
++ (NSString *)reservationCount:(NSUInteger)count;
 
 + (NSString *)hotelPlaceholder;
 + (NSString *)guestPlaceholder;

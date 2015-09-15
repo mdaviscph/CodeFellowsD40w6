@@ -42,6 +42,9 @@
 }
 
 + (NSString *)roomCount:(NSUInteger)count {
+  return [NSString stringWithFormat: NSLocalizedString(@"%lu Rooms", @"count of rooms"), (unsigned long)count];
+}
++ (NSString *)roomCountRoomType:(NSUInteger)count {
   return [NSString stringWithFormat: NSLocalizedString(@"%lu rooms of type", @"count of rooms of specific type"), (unsigned long)count];
 }
 
@@ -68,6 +71,10 @@
   NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
   dateFormatter.dateFormat = @"MM/dd/yyyy";
   return [dateFormatter stringFromDate: date];
+}
+
++ (NSString *)reservationCount:(NSUInteger)count {
+  return [NSString stringWithFormat: NSLocalizedString(@"%lu Reservations", @"count of reservations"), (unsigned long)count];
 }
 
 + (NSString *)hotelPlaceholder {

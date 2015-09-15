@@ -172,8 +172,8 @@ static const NSInteger kUnselectedIndex = -1;
   AttributedString *atString = [[AttributedString alloc] init];
   
   if (self.isNewBooking) {
-    Guest *guest = self.selectedGuestIndex != -1 ? [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex] : nil;
-    Hotel *hotel = self.selectedHotelIndex != -1 ? [CoreDataStack sharedInstance].savedHotels[self.selectedHotelIndex] : nil;
+    Guest *guest = self.selectedGuestIndex != kUnselectedIndex ? [CoreDataStack sharedInstance].savedGuests[self.selectedGuestIndex] : nil;
+    Hotel *hotel = self.selectedHotelIndex != kUnselectedIndex ? [CoreDataStack sharedInstance].savedHotels[self.selectedHotelIndex] : nil;
     [atString assignHeadline: hotel.name withPlaceholder: [ViewUtility hotelPlaceholder] withSelector: @"hotelTapped"];
     [atString assignHeadline2: self.selectedRoom.number withSelector: nil];
     [atString assignSubheadline: [ViewUtility nameWithLast: guest.lastName first: guest.firstName] withPlaceholder: [ViewUtility guestPlaceholder] withSelector: @"guestTapped"];
@@ -370,7 +370,8 @@ static const NSInteger kUnselectedIndex = -1;
   }
   cell.textView.backgroundColor = [UIColor apricot];
   cell.borderColor = [UIColor darkVenetianRed];
-  cell.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];  return cell;
+  cell.textView.attributedText = [atString hypertextStringWithColor: [UIColor darkVenetianRed]];
+  return cell;
 }
 
 #pragma mark - UITableViewDelegate
