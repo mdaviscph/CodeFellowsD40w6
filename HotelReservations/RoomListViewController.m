@@ -30,6 +30,7 @@ static const NSInteger kUnselectedIndex = -1;
 @property (strong, nonatomic) NSArray *tableViewSpacerConstraints;
 
 @property (strong, nonatomic) NSArray *queryRooms;
+
 @property (nonatomic) NSInteger selectedGuestIndex;
 @property (nonatomic) NSInteger selectedHotelIndex;
 @property (nonatomic) NSInteger selectedRoomIndex;
@@ -205,7 +206,8 @@ static const NSInteger kUnselectedIndex = -1;
   [self.tableView reloadData];
 }
 - (void) queryForAvailableRooms {
-  self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] usingRoom: self.selectedRoom];
+  NSString *hotelName = self.selectedHotelIndex != kUnselectedIndex ? [[CoreDataStack sharedInstance].savedHotels[self.selectedHotelIndex] name] : nil;
+  self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] matchingRoom: self.selectedRoom hotelName: hotelName];
   [self updateUI];
 }
 

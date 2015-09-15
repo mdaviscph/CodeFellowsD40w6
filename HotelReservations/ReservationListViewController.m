@@ -203,7 +203,7 @@ static const NSInteger kUnselectedIndex = -1;
   [self.tableView reloadData];
 }
 - (void) queryForAvailableRooms {
-  self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] usingReservation: self.selectedReservation];
+  self.queryRooms = [[CoreDataStack sharedInstance] roomsAscendingOnKeys: @[@"hotel.name",@"number"] matchingReservation: self.selectedReservation];
   [self updateUI];
 }
 

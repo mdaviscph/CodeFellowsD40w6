@@ -196,7 +196,7 @@ NSString *reservationKey = @"Reservation";
   return rooms;
 }
 
-- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys usingReservation:(Reservation *)reservation {
+- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys matchingReservation:(Reservation *)reservation {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
@@ -218,16 +218,16 @@ NSString *reservationKey = @"Reservation";
   return rooms;
 }
 
-- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys usingRoom:(Room *)room {
+- (NSArray *)roomsAscendingOnKeys:(NSArray *)sortKeys matchingRoom:(Room *)room hotelName:(NSString *)hotelName {
   
   NSError *fetchError;
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: roomKey];
   NSPredicate * predicate;
-  if (room.hotel && room.type.integerValue != -1) {
-    predicate = [NSPredicate predicateWithFormat:@"type = %@ AND hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, room.hotel.name, room.bookedOut, room.bookedIn];
-  } else if (room.hotel && room.type.integerValue == -1) {
-      predicate = [NSPredicate predicateWithFormat:@"hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.hotel.name, room.bookedOut, room.bookedIn];
-  } else if (!room.hotel && room.type.integerValue != -1) {
+  if (hotelName && room.type.integerValue != -1) {
+    predicate = [NSPredicate predicateWithFormat:@"type = %@ AND hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, hotelName, room.bookedOut, room.bookedIn];
+  } else if (hotelName && room.type.integerValue == -1) {
+      predicate = [NSPredicate predicateWithFormat:@"hotel.name = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", hotelName, room.bookedOut, room.bookedIn];
+  } else if (!hotelName && room.type.integerValue != -1) {
       predicate = [NSPredicate predicateWithFormat:@"type = %@ AND (bookedIn = nil OR bookedIn > %@ OR bookedOut < %@)", room.type, room.bookedOut, room.bookedIn];
   } else {
     predicate = [NSPredicate predicateWithFormat:@"bookedIn = nil OR bookedIn > %@ OR bookedOut < %@", room.bookedOut, room.bookedIn];
