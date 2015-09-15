@@ -75,8 +75,6 @@
   self.tableView.delegate = self;
   [self.tableView registerClass: [TableViewCell class] forCellReuseIdentifier: @"TableCell"];
   
-  [self.textView setLinkTextAttributes: @{NSForegroundColorAttributeName : [UIColor vanDykeBrown]}];
-  
   if ([[CoreDataStack sharedInstance] fetchHotelCount] > 0) {
     [[CoreDataStack sharedInstance] fetchHotelsAscendingOnKeys: @[@"name"]];
     self.selectedHotel = [CoreDataStack sharedInstance].savedHotels.firstObject;
