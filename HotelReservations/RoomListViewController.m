@@ -95,7 +95,6 @@ static const CGFloat kSelectionViewHeight = 180;
 #pragma mark - Life Cycle Methods
 
 - (void)loadView {
-  NSLog(@"loading list view for Rooms");
   
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor venetianRed];
@@ -109,7 +108,7 @@ static const CGFloat kSelectionViewHeight = 180;
   
   self.edgesForExtendedLayout = UIRectEdgeNone;
   
-  self.navigationItem.title = NSLocalizedString(@"Rooms", @"navigation item title");
+  self.navigationItem.title = [ViewUtility menuItemRooms];
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
   
   self.textView.delegate = self;
@@ -235,7 +234,7 @@ static const CGFloat kSelectionViewHeight = 180;
   self.selectedRoom.bookedIn = [NSDate date];
   self.selectedRoom.bookedOut = [NSDate date];
   
-  self.navigationItem.title = NSLocalizedString(@"Assign a Room", @"navigation item title");
+  self.navigationItem.title = [ViewUtility menuItemAssignRoom];
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target: self action: @selector(saveButtonTapped)];
   self.navigationItem.rightBarButtonItem = saveButton;
   self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonTapped)];
@@ -253,7 +252,7 @@ static const CGFloat kSelectionViewHeight = 180;
   
   self.textView.selectable = NO;
   
-  self.navigationItem.title = NSLocalizedString(@"Rooms", @"navigation item title");
+  self.navigationItem.title = [ViewUtility menuItemRooms];
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addButtonTapped)];
   self.navigationItem.leftBarButtonItem = nil;
   

@@ -12,6 +12,7 @@
 #import "GuestListViewController.h"
 #import "ReservationListViewController.h"
 #import "UIViewExtension.h"
+#import "ViewUtility.h"
 #import "UIColorExtension.h"
 #import "JSONFileImport.h"
 #import "CoreDataStack.h"
@@ -31,11 +32,6 @@
 
 @implementation MenuViewController
 
-NSString *const menuItemHotels = @"Hotels";
-NSString *const menuItemRooms = @"Rooms";
-NSString *const menuItemGuests = @"Guests";
-NSString *const menuItemReservations = @"Reservations";
-
 #pragma mark - Private Property Getters, Setters
 
 - (UITableView *)tableView {
@@ -49,7 +45,7 @@ NSString *const menuItemReservations = @"Reservations";
 
 - (NSArray *)menuItems {
   if (!_menuItems) {
-    _menuItems = @[menuItemHotels, menuItemRooms, menuItemGuests, menuItemReservations];
+    _menuItems = @[[ViewUtility menuItemHotels], [ViewUtility menuItemRooms], [ViewUtility menuItemGuests], [ViewUtility menuItemReservations]];
   }
   return _menuItems;
 }

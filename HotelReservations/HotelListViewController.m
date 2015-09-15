@@ -59,7 +59,6 @@ static const CGFloat kTextViewHeight = 100;       // could not get textView to r
 #pragma mark - Life Cycle Methods
 
 - (void)loadView {
-  NSLog(@"loading list view for Hotels");
   
   UIView *rootView = [[UIView alloc] init];
   rootView.backgroundColor = [UIColor vanDykeBrown];
@@ -73,7 +72,7 @@ static const CGFloat kTextViewHeight = 100;       // could not get textView to r
   
   self.edgesForExtendedLayout = UIRectEdgeNone;
   
-  self.navigationItem.title = NSLocalizedString(@"Hotels", @"navigation item title");
+  self.navigationItem.title = [ViewUtility menuItemHotels];
   
   self.tableView.dataSource = self;
   self.tableView.delegate = self;

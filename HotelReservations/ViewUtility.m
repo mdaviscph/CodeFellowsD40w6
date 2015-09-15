@@ -86,4 +86,23 @@
 + (NSString *)roomTypePlaceholder {
   return NSLocalizedString(@"select a room type...", @"used as placeholder text");
 }
++ (NSString *)menuItemHotels {
+  return NSLocalizedString(@"Hotels", @"menu item and navigation item title");
+}
++ (NSString *)menuItemRooms  {
+  return NSLocalizedString(@"Rooms", @"menu item and navigation item title");
+}
++ (NSString *)menuItemGuests {
+  return NSLocalizedString(@"Guests", @"menu item and navigation item title");
+}
++ (NSString *)menuItemReservations {
+  return NSLocalizedString(@"Reservations", @"menu item and navigation item title");
+}
++ (NSString *)menuItemAssignRoom  {
+  return NSLocalizedString(@"Assign a Room", @"navigation item title");
+}
++ (NSString *)menuItemMakeReservation {
+  return NSLocalizedString(@"Make a Reservation", @"navigation item title");
+}
+
 @end
