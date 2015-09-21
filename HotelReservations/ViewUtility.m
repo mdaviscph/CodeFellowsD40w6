@@ -86,6 +86,9 @@
 + (NSString *)roomTypePlaceholder {
   return NSLocalizedString(@"select a room type...", @"used as placeholder text");
 }
++ (NSString *)navigationTitle {
+  return NSLocalizedString(@"Hotel Reservations", @"navigation item title");
+}
 + (NSString *)menuItemHotels {
   return NSLocalizedString(@"Hotels", @"menu item and navigation item title");
 }

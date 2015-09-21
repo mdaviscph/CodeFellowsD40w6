@@ -100,7 +100,8 @@
   [super viewDidLoad];
 
   self.edgesForExtendedLayout = UIRectEdgeNone;
-  self.navigationItem.title = @"Hotel Reservations";
+  
+  self.navigationItem.title = [ViewUtility navigationTitle];
   self.navigationController.navigationBar.barTintColor = [UIColor almond];
   self.navigationController.navigationBar.translucent = NO;
   

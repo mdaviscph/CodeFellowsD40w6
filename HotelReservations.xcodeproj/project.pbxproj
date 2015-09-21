@@ -11,6 +11,7 @@
 		0001E1971BA6260F00669A5A /* Reservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E1961BA6260F00669A5A /* Reservation.m */; };
 		0001E19A1BA6260F00669A5A /* Hotel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E1991BA6260F00669A5A /* Hotel.m */; };
 		0001E19D1BA6260F00669A5A /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001E19C1BA6260F00669A5A /* Room.m */; };
+		005EAC5C1BAF2CF700422271 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 005EAC5E1BAF2CF700422271 /* Localizable.strings */; };
 		006116491B9F441100B5C54B /* HotelJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116481B9F441100B5C54B /* HotelJSONParse.m */; };
 		0061164C1B9F46A400B5C54B /* RoomJSONParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 0061164B1B9F46A400B5C54B /* RoomJSONParse.m */; };
 		006116551B9F4C8700B5C54B /* JSONFileImport.m in Sources */ = {isa = PBXBuildFile; fileRef = 006116541B9F4C8700B5C54B /* JSONFileImport.m */; };
@@ -57,6 +58,8 @@
 		0001E19B1BA6260F00669A5A /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		0001E19C1BA6260F00669A5A /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		0001E19E1BA68ED500669A5A /* EnumSelecting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnumSelecting.h; sourceTree = "<group>"; };
+		005EAC591BAF2BA500422271 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		005EAC5D1BAF2CF700422271 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		006116471B9F441100B5C54B /* HotelJSONParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotelJSONParse.h; sourceTree = "<group>"; };
 		006116481B9F441100B5C54B /* HotelJSONParse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotelJSONParse.m; sourceTree = "<group>"; };
 		0061164A1B9F46A400B5C54B /* RoomJSONParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomJSONParse.h; sourceTree = "<group>"; };
@@ -217,6 +220,7 @@
 		00D2C0301B9E855D00DA5A7A /* HotelReservations */ = {
 			isa = PBXGroup;
 			children = (
+				005EAC5E1BAF2CF700422271 /* Localizable.strings */,
 				006116871BA0C62F00B5C54B /* View */,
 				00166E931B9F40A50037E59F /* Model */,
 				006116731B9F664400B5C54B /* Controller */,
@@ -300,7 +304,7 @@
 		00D2C0261B9E855D00DA5A7A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "mike davis";
 				TargetAttributes = {
 					00D2C02D1B9E855D00DA5A7A = {
@@ -337,6 +341,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0061166F1B9F5C1600B5C54B /* hotels.json in Resources */,
+				005EAC5C1BAF2CF700422271 /* Localizable.strings in Resources */,
 				00D2C0451B9E855D00DA5A7A /* LaunchScreen.xib in Resources */,
 				00D2C0421B9E855D00DA5A7A /* Images.xcassets in Resources */,
 			);
@@ -402,10 +407,19 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		005EAC5E1BAF2CF700422271 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				005EAC5D1BAF2CF700422271 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		00D2C0431B9E855D00DA5A7A /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				00D2C0441B9E855D00DA5A7A /* Base */,
+				005EAC591BAF2BA500422271 /* de */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -434,6 +448,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -501,6 +516,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HotelReservations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mdaviscph.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -511,6 +527,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HotelReservations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mdaviscph.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -529,6 +546,7 @@
 				);
 				INFOPLIST_FILE = HotelReservationsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mdaviscph.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HotelReservations.app/HotelReservations";
 			};
@@ -544,6 +562,7 @@
 				);
 				INFOPLIST_FILE = HotelReservationsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mdaviscph.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HotelReservations.app/HotelReservations";
 			};

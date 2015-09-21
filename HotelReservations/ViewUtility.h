@@ -32,6 +32,7 @@
 + (NSString *)guestPlaceholder;
 + (NSString *)roomTypePlaceholder;
 
++ (NSString *)navigationTitle;
 + (NSString *)menuItemHotels;
 + (NSString *)menuItemRooms;
 + (NSString *)menuItemGuests;
